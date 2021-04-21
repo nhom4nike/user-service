@@ -1,14 +1,13 @@
 const { Eureka } = require('eureka-js-client')
-const { networkInterfaces } = require('os')
+const { ipv4 } = require('../utils/network')
 
-const ipAddr = getIPAddress()
 const eureka = new Eureka({
   // application instance information
   instance: {
     app: process.env.SERVICE_NAME,
-    instanceId: `${ipAddr}:${process.env.SERVICE_NAME}:${process.env.PORT}`,
-    hostName: ipAddr,
-    ipAddr,
+    instanceId: `${ipv4}:${process.env.SERVICE_NAME}:${process.env.PORT}`,
+    hostName: ipv4,
+    ipAddr: ipv4,
     vipAddress: process.env.SERVICE_NAME,
     port: {
       $: `${process.env.PORT}`,
@@ -29,30 +28,5 @@ const eureka = new Eureka({
     preferIpAddress: true
   }
 })
-
-function getIPAddress() {
-  const nets = networkInterfaces()
-  const results = Object.create(null) // Or just '{}', an empty object
-
-  for (const name of Object.keys(nets)) {
-    for (const net of nets[name]) {
-      // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
-      if (net.family === 'IPv4' && !net.internal) {
-        if (!results[name]) {
-          results[name] = []
-        }
-        results[name].push(net.address)
-      }
-    }
-  }
-
-  for (const key in results) {
-    if (Object.hasOwnProperty.call(results, key)) {
-      const element = results[key]
-      return element[0]
-    }
-  }
-  return '0.0.0.0'
-}
 
 module.exports = eureka
