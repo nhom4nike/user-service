@@ -6,4 +6,5 @@ extends:
   - standard
 parserOptions:
   ecmaVersion: 12
-rules: {}
+rules:
+  space-before-function-paren: 0
