@@ -14,6 +14,6 @@ routes.forEach((item) => {
   server.use(item.endpoint, item.router)
 })
 
-eureka.start()
+if (!process.env.EUREKA_DISABLE) eureka.start()
 
 module.exports = server

@@ -6,7 +6,7 @@
   "scripts": {
     "start:docker": "node .",
     "start": "cross-env NODE_ENV=production node .",
-    "dev": "cross-env NODE_ENV=development nodemon",
+    "dev": "cross-env EUREKA_DISABLE=1 NODE_ENV=development nodemon",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
