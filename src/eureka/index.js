@@ -6,9 +6,10 @@ const eureka = new Eureka({
   // application instance information
   instance: {
     app: process.env.SERVICE_NAME,
+    instanceId: `${ipAddr}:${process.env.SERVICE_NAME}:${process.env.PORT}`,
     hostName: ipAddr,
     ipAddr,
-    vipAddress: ipAddr,
+    vipAddress: process.env.SERVICE_NAME,
     port: {
       $: `${process.env.PORT}`,
       '@enabled': true
