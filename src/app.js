@@ -4,6 +4,7 @@ const { json } = require('body-parser')
 const cookieParser = require('cookie-parser')
 const routes = require('./routes')
 const eureka = require('./eureka')
+const database = require('./database')
 
 const server = express()
 server.use(json())
