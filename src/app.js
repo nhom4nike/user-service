@@ -14,12 +14,6 @@ routes.forEach((item) => {
   server.use(item.endpoint, item.router)
 })
 
-// register with eureka
-eureka.start((error) => {
-  if (error) {
-    console.error(error)
-    process.exit(1)
-  }
-})
+eureka.start()
 
 module.exports = server
