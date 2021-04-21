@@ -1,6 +1,7 @@
 services:
   app:
     build: .
+    env_file: ./env.docker
     ports:
       - '3001:3001'
 
@@ -8,10 +9,6 @@ services:
     image: mongo
     ports:
       - '27011:27017'
-    volumes:
-      - type: volume
-        source: data
-        target: /var/data
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
