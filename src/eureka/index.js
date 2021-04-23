@@ -1,13 +1,14 @@
 const { Eureka } = require('eureka-js-client')
 const { ipv4 } = require('../utils/network')
 
+let hostIp = process.env.NODE_ENV === 'production' ? process.env.EUREKA_HOST : ipv4;
 const eureka = new Eureka({
   // application instance information
   instance: {
     app: process.env.SERVICE_NAME,
-    instanceId: `${ipv4}:${process.env.SERVICE_NAME}:${process.env.PORT}`,
-    hostName: ipv4,
-    ipAddr: ipv4,
+    instanceId: `${hostIp}:${process.env.SERVICE_NAME}:${process.env.PORT}`,
+    hostName: hostIp,
+    ipAddr: hostIp,
     vipAddress: process.env.SERVICE_NAME,
     port: {
       $: `${process.env.PORT}`,
