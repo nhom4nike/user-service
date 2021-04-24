@@ -7,6 +7,8 @@ module.exports = model(
     email: {
       type: Schema.Types.String,
       required: true,
+      index: true,
+      unique: true,
       validate: {
         validator: (s) => emailValidator(s),
         message: 'invalid email format'
