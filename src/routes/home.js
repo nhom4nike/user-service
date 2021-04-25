@@ -1,9 +1,5 @@
 const express = require('express')
-const UserAggregate = require('../cqrs/aggregates/user.aggregate')
-const UserFactory = require('../cqrs/factories/user.factory')
-const UserProjection = require('../cqrs/projections/user.projection')
-const UserRepository = require('../cqrs/repositories/user.repository')
-const UserModel = require('../database/user.model')
+const cqrs = require('../cqrs')
 
 const router = express.Router()
 
@@ -13,7 +9,7 @@ router.get('/', async (req, res) => {
 
 router.get('/user/:id', async (req, res) => {
   try {
-    const projection = new UserProjection(new UserFactory(UserModel))
+    const { projection } = cqrs.user
     const user = await projection.handle({
       name: 'get',
       query: req.params
@@ -30,7 +26,7 @@ router.get('/user/:id', async (req, res) => {
 
 router.post('/user/create', async (req, res) => {
   try {
-    const aggregate = new UserAggregate(new UserRepository(UserModel))
+    const { aggregate } = cqrs.user
     const id = await aggregate.handle({
       name: 'create',
       payload: req.body

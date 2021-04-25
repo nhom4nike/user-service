@@ -1,10 +1,4 @@
 services:
-  app:
-    build: .
-    env_file: ./.env.docker
-    ports:
-      - '3001:3001'
-
   mongo:
     image: mongo
     ports:
