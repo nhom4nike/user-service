@@ -2,7 +2,11 @@
   "compilerOptions": {
     "module": "commonJS",
     "target": "es2020",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*":["./*"]
+    }
   },
   "exclude": ["node_modules"]
 }

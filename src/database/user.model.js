@@ -19,13 +19,13 @@ module.exports = model(
       type: Schema.Types.String,
       index: true,
       minLength: 128,
-      maxLength: 128,
+      maxLength: 255,
       required: true
     },
     password: {
       type: Schema.Types.String,
-      minLength: 128,
-      maxLength: 128,
+      minLength: 64,
+      maxLength: 255,
       required: true
     }
   })

@@ -6,6 +6,7 @@
  * @property {boolean} verfied whether this user's email has been verified
  */
 
+/** buiness logic for write operations */
 class UserRepository {
   /**
    * @param {import('../../database/user.model')} model a mongoose model

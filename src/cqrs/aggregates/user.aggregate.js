@@ -5,10 +5,11 @@ const random = require('crypto-random-string')
 /**
  * @typedef {Object} RegistrationPayload
  * @property {string} email
- * @property {string} password 128-character hashed password
+ * @property {string} password sha512-hash password
  * @property {boolean} verfied whether this user's email has been verified
  */
 
+/** user's commands handler */
 class UserAggregate {
   /**
    * @param {import('../repositories/user.repository')} repository
@@ -20,7 +21,7 @@ class UserAggregate {
   /**
    * @param {RegistrationPayload} payload
    */
-  async create(payload) {
+  async _create(payload) {
     const secret = random(128)
     const password = base64.stringify(sha512(payload.password, secret))
     return this.repository.create({
@@ -33,11 +34,11 @@ class UserAggregate {
 
   /**
    * @param {Object} command
-   * @param {'create'} command.name the name of query command
+   * @param {'create'} command.name the name of command
    * @param {Object} command.payload additional conditions for the query
    */
   async handle({ name, payload }) {
-    if (name === 'create') return this.create(payload)
+    if (name === 'create') return this._create(payload)
     throw new Error('unknown command: ' + name)
   }
 }

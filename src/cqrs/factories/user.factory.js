@@ -1,3 +1,4 @@
+/** buiness logic for read operations */
 class UserFactory {
   /**
    * @param {import('../../database/user.model')} model mongoose user model
@@ -6,9 +7,8 @@ class UserFactory {
     this.model = model
   }
 
-  async getAll() {
-    const results = await this.model.find()
-    return results
+  async get({ id = '' }) {
+    return this.model.findById(id).lean()
   }
 }
 
