@@ -7,14 +7,14 @@ router.get('/', async (req, res) => {
   res.send('<h1>Welcome to User Service</h1>')
 })
 
-router.get('/user/:id', async (req, res) => {
+router.post('/create', async (req, res) => {
   try {
-    const { projection } = cqrs.user
-    const user = await projection.handle({
-      name: 'get',
-      query: req.params
+    const { aggregate } = cqrs.user
+    const id = await aggregate.handle({
+      name: 'create',
+      payload: req.body
     })
-    return user ? res.send(user) : res.status(404).send('user not found')
+    return res.json({ id })
   } catch (error) {
     console.error(error)
     if (error.name === 'ValidationError') {
@@ -24,14 +24,14 @@ router.get('/user/:id', async (req, res) => {
   }
 })
 
-router.post('/user/create', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
-    const { aggregate } = cqrs.user
-    const id = await aggregate.handle({
-      name: 'create',
-      payload: req.body
+    const { projection } = cqrs.user
+    const user = await projection.handle({
+      name: 'get',
+      query: req.params
     })
-    return res.send(id)
+    return user ? res.send(user) : res.status(404).send('user not found')
   } catch (error) {
     console.error(error)
     if (error.name === 'ValidationError') {
