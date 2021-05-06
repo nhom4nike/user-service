@@ -7,31 +7,43 @@ const { Schema } = require('mongoose')
 module.exports = function (mongoose) {
   return mongoose.model(
     'user',
-    new Schema({
-      username: {
-        type: Schema.Types.String,
-        required: true,
-        index: true,
-        unquie: true
-      },
-      email: {
-        type: Schema.Types.String,
-        required: true,
-        index: true,
-        unique: true,
-        validate: {
-          validator: (s) => email.validate(s),
-          message: 'user-model/invalid-email'
+    new Schema(
+      {
+        username: {
+          type: Schema.Types.String,
+          required: true,
+          index: true,
+          unquie: true
+        },
+        email: {
+          type: Schema.Types.String,
+          required: true,
+          index: true,
+          unique: true,
+          validate: {
+            validator: (s) => email.validate(s),
+            message: 'user-model/invalid-email'
+          }
+        },
+        secret: {
+          type: Schema.Types.String,
+          required: true
+        },
+        password: {
+          type: Schema.Types.String,
+          required: true
+        },
+        status: {
+          type: Schema.Types.String,
+          default: 'inactive'
         }
       },
-      secret: {
-        type: Schema.Types.String,
-        required: true
-      },
-      password: {
-        type: Schema.Types.String,
-        required: true
+      {
+        timestamps: {
+          createdAt: 'created_at',
+          updatedAt: 'updated_at'
+        }
       }
-    })
+    )
   )
 }

@@ -27,19 +27,19 @@ class UserRepository {
   async create({ username, email, password }, test = false) {
     if (!test) {
       // perform validation
-      if (!this.validatePassword(password)) {
-        throw new Error('user-model/weak-password')
-      }
       if (!validateEmail(email)) {
-        throw new Error('user-model/invalid-email')
+        throw new Error('user/invalid-email')
+      }
+      if (!this.validatePassword(password)) {
+        throw new Error('user/weak-password')
       }
     }
 
     const secret = test ? password : await bcrypt.genSalt(12)
     const hashed = test ? password : await bcrypt.hash(password, secret)
     const document = await this.model.create({
-      username: username.trim(),
-      email: email.trim(),
+      username: username?.trim(),
+      email: email?.trim(),
       secret,
       password: hashed
     })

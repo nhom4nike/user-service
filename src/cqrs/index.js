@@ -1,13 +1,15 @@
-const mongoose = require('mongoose')
 const { UserAggregate } = require('../cqrs/aggregates')
 const { UserFactory } = require('../cqrs/factories')
 const { UserProjection } = require('../cqrs/projections')
 const { UserRepository } = require('../cqrs/repositories')
-const { UserModel } = require('../database')
+const UserModel = require('../database/user.model')
 
-module.exports = {
-  user: {
-    projection: new UserProjection(new UserFactory(UserModel(mongoose))),
-    aggregate: new UserAggregate(new UserRepository(UserModel(mongoose)))
+module.exports = function (mongoose) {
+  const model = UserModel(mongoose)
+  return {
+    user: {
+      projection: new UserProjection(new UserFactory(model)),
+      aggregate: new UserAggregate(new UserRepository(model))
+    }
   }
 }

@@ -1,5 +1,5 @@
 const express = require('express')
-const cqrs = require('../cqrs')
+const cqrs = require('../cqrs')(global.mongoose)
 
 const router = express.Router()
 
@@ -16,10 +16,12 @@ router.post('/create', async (req, res) => {
     })
     return res.json({ id })
   } catch (error) {
-    console.error(error)
-    if (error.name === 'ValidationError') {
-      return res.status(400).send('400 Bad Request')
+    const [, code] = error.message.split('/')
+    if (code) return res.status(400).send({ error: code })
+    else if (error.name === 'ValidationError') {
+      return res.status(400).send({ error: error.message })
     }
+    console.error(error)
     return res.status(500).send('500 Internal Server Error')
   }
 })
