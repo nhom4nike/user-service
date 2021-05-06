@@ -4,8 +4,9 @@ const { UserProjection } = require('../cqrs/projections')
 const { UserRepository } = require('../cqrs/repositories')
 const UserModel = require('../database/user.model')
 
+let model
 module.exports = function (mongoose) {
-  const model = UserModel(mongoose)
+  if (!model) model = UserModel(mongoose)
   return {
     user: {
       projection: new UserProjection(new UserFactory(model)),

@@ -1,4 +1,4 @@
-const { validate: validateEmail } = require('email-validator')
+const validator = require('validator')
 const { initiTestDB } = require('@/utils/testing')
 const UserRepository = require('@/cqrs/repositories/user.repository')
 const UserModel = require('@/database/user.model')
@@ -28,17 +28,17 @@ test('should these emails be valid', async () => {
     'email@example.co.jp',
     'email@example.web',
     'email@example.museum',
+    'あいうえお@example.com',
     'firstname-lastname@example.com'
   ]
   valids.forEach((email) => {
-    const yes = validateEmail(email)
+    const yes = validator.isEmail(email)
     expect(yes).toBeTruthy()
   })
 })
 
 test('should these email be invalid', async () => {
   const invalids = [
-    'あいうえお@example.com',
     'plainaddress',
     '#@%^%#$@#$@#.com',
     '@example.com',
@@ -57,7 +57,7 @@ test('should these email be invalid', async () => {
     'email@[123.123.123.123]'
   ]
   invalids.forEach((email) => {
-    const yes = validateEmail(email)
+    const yes = validator.isEmail(email)
     expect(yes).toBeFalsy()
   })
 })

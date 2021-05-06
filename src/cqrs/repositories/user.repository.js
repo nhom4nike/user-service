@@ -1,4 +1,5 @@
-const { validate: validateEmail } = require('email-validator')
+const validator = require('validator').default
+const errors = require('../../utils/errors')
 const bcrypt = require('bcrypt')
 
 /**
@@ -25,13 +26,20 @@ class UserRepository {
    * @returns {Promise<string>} id of new user
    */
   async create({ username, email, password }, test = false) {
+    if (process.env.NODE_ENV !== 'test' && test) {
+      console.error(
+        'test mode should only be used in test environment, terminate process'
+      )
+      return process.exit(-1)
+    }
+
     if (!test) {
       // perform validation
-      if (!validateEmail(email)) {
-        throw new Error('user/invalid-email')
+      if (!validator.isEmail(email)) {
+        throw errors.create('user', 'invalid-email', email)
       }
       if (!this.validatePassword(password)) {
-        throw new Error('user/weak-password')
+        throw errors.create('user', 'weak-password', password)
       }
     }
 

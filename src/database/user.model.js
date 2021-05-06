@@ -1,4 +1,4 @@
-const email = require('email-validator')
+const validator = require('validator').default
 const { Schema } = require('mongoose')
 
 /**
@@ -21,7 +21,7 @@ module.exports = function (mongoose) {
           index: true,
           unique: true,
           validate: {
-            validator: (s) => email.validate(s),
+            validator: (s) => validator.isEmail(s),
             message: 'user-model/invalid-email'
           }
         },

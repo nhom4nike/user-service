@@ -1,3 +1,5 @@
+const errors = require('../../utils/errors')
+
 /** buiness logic for read operations */
 class UserFactory {
   /**
@@ -8,7 +10,9 @@ class UserFactory {
   }
 
   async get({ id = '' }) {
-    return this.model.findById(id).lean()
+    const user = await this.model.findById(id).lean()
+    if (!user) throw errors.create('user', 'not-found', id)
+    return user
   }
 }
 

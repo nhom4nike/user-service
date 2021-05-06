@@ -23,10 +23,10 @@ class UserProjection {
 
   /**
    * @param {Object} command
-   * @param {'get'} command.name the name of query command
-   * @param {Object} command.query additional conditions for the query
+   * @param {'get'} name the name of query command
+   * @param {Object} query additional conditions for the query
    */
-  async handle({ name, query }) {
+  async query(name, query) {
     switch (name) {
       case 'get':
         return this._get(query)

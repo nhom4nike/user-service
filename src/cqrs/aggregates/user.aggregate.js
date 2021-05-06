@@ -23,11 +23,10 @@ class UserAggregate {
   }
 
   /**
-   * @param {Object} command
-   * @param {'create'} command.name the name of command
-   * @param {Object} command.payload additional conditions for the query
+   * @param {'create'}name the name of command
+   * @param {Object}payload additional conditions for the query
    */
-  async handle({ name, payload }) {
+  async command(name, payload) {
     if (name === 'create') return this._create(payload)
     throw new Error('unknown command: ' + name)
   }
