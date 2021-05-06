@@ -20,7 +20,13 @@ class UserRepository {
    * @returns {Promise<string>} id of new user
    */
   async create(user) {
-    const document = await this.model.create(user)
+    const { email, secret, password, verified } = user
+    const document = await this.model.create({
+      email: email.trim(),
+      secret,
+      password,
+      verified
+    })
     return document.id
   }
 }
