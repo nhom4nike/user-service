@@ -1,3 +1,4 @@
+const email = require('email-validator')
 const { Schema } = require('mongoose')
 
 /**
@@ -7,17 +8,22 @@ module.exports = function (mongoose) {
   return mongoose.model(
     'user',
     new Schema({
+      username: {
+        type: Schema.Types.String,
+        required: true,
+        index: true,
+        unquie: true
+      },
       email: {
         type: Schema.Types.String,
         required: true,
         index: true,
         unique: true,
         validate: {
-          validator: (s) => s.match(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g),
+          validator: (s) => email.validate(s),
           message: 'user-model/invalid-email'
         }
       },
-      verified: { type: Schema.Types.Boolean, default: false },
       secret: {
         type: Schema.Types.String,
         required: true
