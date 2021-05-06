@@ -1,7 +1,3 @@
-const sha512 = require('crypto-js/hmac-sha512')
-const base64 = require('crypto-js/enc-base64')
-const random = require('crypto-random-string')
-
 /**
  * @typedef {Object} RegistrationPayload
  * @property {string} email
@@ -22,14 +18,8 @@ class UserAggregate {
    * @param {RegistrationPayload} payload
    */
   async _create(payload) {
-    const secret = random(128)
-    const password = base64.stringify(sha512(payload.password, secret))
-    return this.repository.create({
-      email: payload.email,
-      secret,
-      password,
-      verfied: payload.verfied
-    })
+    return this.repository.create(payload)
+    // TODO: send out topic USER_CREATED
   }
 
   /**

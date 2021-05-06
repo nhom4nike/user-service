@@ -1,4 +1,3 @@
-const random = require('crypto-random-string')
 const { initiTestDB } = require('@/utils/testing')
 const UserRepository = require('@/cqrs/repositories/user.repository')
 const UserModel = require('@/database/user.model')
@@ -30,14 +29,15 @@ test('should these emails be valid', async () => {
     'email@example.co.jp',
     'firstname-lastname@example.com'
   ]
-
   const tasks = valids.map((email) => {
-    return target.create({
-      email,
-      secret: random(128),
-      password: random(128),
-      verified: true
-    })
+    return target.create(
+      {
+        email,
+        password: 'Manh@Tuan1999',
+        verified: true
+      },
+      true
+    )
   })
   await Promise.all(tasks)
 })
@@ -68,91 +68,87 @@ test('should these email be invalid', async () => {
     'firstname+lastname@example.com'
   ]
   const tasks = invalids.map((email) => {
-    return target.create({
-      email,
-      secret: random(128),
-      password: random(128),
-      verified: true
-    })
+    return target.create(
+      {
+        email,
+        password: 'Manh@Tuan1999',
+        verified: true
+      },
+      true
+    )
   })
   expect(Promise.all(tasks)).rejects.toThrowError()
 })
 
-test('should success if secret is in range [128,255]', async () => {
+test('should password match regex', async () => {
   const users = new UserRepository(model)
-  const secret1 = random(128)
-  const secret2 = random(255)
 
-  await users.create({
-    secret: secret1,
-    email: random(12) + '@email.com',
-    password: random(128)
-  })
-  await users.create({
-    secret: secret2,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    password: random(128)
+  const strongs = [
+    'YRwJt+45',
+    'U4TsS9z@',
+    '9!z.Zq=U',
+    'GQAk_4&t',
+    'Br8Lu43}',
+    'z_{*27%Q',
+    '(Y]2pjPJ',
+    '98$P7Bc/',
+    'QZ[7jJw{',
+    'nxPv_jq4',
+    'SU=4?5hV',
+    'b7.+2M)?',
+    '7KVZGA&f',
+    'Wb-fZF5?',
+    '(^RT3sW!',
+    'z8g7^!HX',
+    'xe^[P3Hp',
+    'R6!QZcx.',
+    '6=TM)XsK',
+    '.Susan53',
+    'T$7S6rJH'
+  ]
+  strongs.forEach((password) => {
+    const yes = users.validate(password)
+    expect(yes).toBeTruthy()
   })
 })
 
-test('should fail if secret is out of range [128,255]', async () => {
+test('should faild for weak password', async () => {
   const users = new UserRepository(model)
-  const secret1 = random(127)
-  const secret2 = random(256)
-
-  const failedTask1 = users.create({
-    secret: secret1,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    password: random(128)
+  const weaks = [
+    '123456',
+    '123456789',
+    'picture1',
+    'password',
+    '12345678',
+    '111111',
+    '123123',
+    '12345',
+    '1234567890',
+    'senha (Portuguese for password)',
+    '1234567',
+    'qwerty',
+    'abc123',
+    'Million2',
+    '000000',
+    '1234',
+    'iloveyou',
+    'aaron431',
+    'password1',
+    'qqww1122'
+  ]
+  weaks.forEach((password) => {
+    const yes = users.validate(password)
+    expect(yes).toBeFalsy()
   })
-  const failedTask2 = users.create({
-    secret: secret2,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    password: random(128)
-  })
-  expect(Promise.all([failedTask1, failedTask2])).rejects.toThrowError()
-})
-
-test('should success if password is in range [64,255]', async () => {
-  const users = new UserRepository(model)
-  const password1 = random(64)
-  const password2 = random(255)
-
-  await users.create({
-    password: password1,
-    email: random(12) + '@email.com',
-    secret: random(128)
-  })
-  await users.create({
-    password: password2,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    secret: random(128)
-  })
-})
-
-test('should fail if password is out of range [64,255]', async () => {
-  const users = new UserRepository(model)
-  const password3 = random(63)
-  const password4 = random(256)
-
-  const failedTask1 = users.create({
-    password: password3,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    secret: random(128)
-  })
-  const failedTask2 = users.create({
-    password: password4,
-    email: random(16) + 'ddrgnjkjnr@email.com',
-    secret: random(128)
-  })
-  expect(Promise.all([failedTask1, failedTask2])).rejects.toThrowError()
 })
 
 test('should verfied be optional', async () => {
   const users = new UserRepository(model)
-  await users.create({
-    email: 'i.hope.this.email@is.val',
-    password: random(128),
-    secret: random(128)
-  })
+  await users.create(
+    {
+      email: 'i.hope.this.email@is.val',
+      password: 'Manh@Tuan1999'
+    },
+    true
+  )
 })

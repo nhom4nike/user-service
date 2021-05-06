@@ -20,15 +20,10 @@ module.exports = function (mongoose) {
       verified: { type: Schema.Types.Boolean, default: false },
       secret: {
         type: Schema.Types.String,
-        index: true,
-        minLength: 128,
-        maxLength: 255,
         required: true
       },
       password: {
         type: Schema.Types.String,
-        minLength: 64,
-        maxLength: 255,
         required: true
       }
     })
