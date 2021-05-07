@@ -1,6 +1,6 @@
 const errors = require('../../utils/errors')
 
-/** buiness logic for read operations */
+/** business logic for read operations */
 class UserFactory {
   constructor(model) {
     this.model = model

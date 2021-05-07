@@ -1,5 +1,5 @@
 const validator = require('validator').default
-const { initiTestDB } = require('@/utils/testing')
+const { initTestDB } = require('@/utils/testing')
 const UserRepository = require('@/cqrs/repositories/user.repository')
 const UserModel = require('@/database/user.model')
 
@@ -8,7 +8,7 @@ let mongoose
 
 let model
 beforeAll(async () => {
-  mongoose = await initiTestDB('user_repository_test')
+  mongoose = await initTestDB('user_repository_test')
   model = UserModel(mongoose)
 })
 

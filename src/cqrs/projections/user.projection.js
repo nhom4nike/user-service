@@ -16,9 +16,7 @@ class UserProjection {
    * @param {GetUserQuery} query
    */
   async _get(query) {
-    return this.repository.get({
-      id: query.id
-    })
+    return this.repository.get(query.id)
   }
 
   /**

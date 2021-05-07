@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 module.exports = {
-  initiTestDB: async function (name) {
+  initTestDB: async function (name) {
     const instance = mongoose.createConnection(
       process.env.MONGO_CONNECTION_STRING,
       {

@@ -2,7 +2,7 @@
  * @typedef {Object} RegistrationPayload
  * @property {string} email
  * @property {string} password sha512-hash password
- * @property {boolean} verfied whether this user's email has been verified
+ * @property {boolean} verified whether this user's email has been verified
  */
 
 /** user's commands handler */
