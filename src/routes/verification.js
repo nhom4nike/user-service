@@ -4,28 +4,24 @@ const express = require('express')
 const {
   user: { projection }
 } = require('../cqrs')(global.mongoose)
+const {
+  codes: { req },
+  format
+} = require('../utils/errors')
 
 const router = express.Router()
 
 router.post(
   '/',
-  body('id', 'missing required parameter')
-    .exists({
-      checkFalsy: true,
-      checkNull: true
-    })
-    .isString()
-    .trim(),
+  body('id', req.missing_param).exists({
+    checkFalsy: true,
+    checkNull: true
+  }),
   async (req, res) => {
     // check request's parameters
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      const error = errors
-        .formatWith((error) => {
-          return { message: error.msg, parameter: error.param }
-        })
-        .array({ onlyFirstError: true })[0]
-      return res.status(400).json({ error })
+      return res.status(400).json({ error: format(errors) })
     }
 
     // find user

@@ -1,7 +1,11 @@
 const { body, validationResult } = require('express-validator')
 const express = require('express')
 const cqrs = require('../cqrs')(global.mongoose)
-const { format, parse } = require('../utils/errors')
+const {
+  format,
+  parse,
+  codes: { req: reqCodes }
+} = require('../utils/errors')
 
 const router = express.Router()
 
@@ -9,14 +13,19 @@ router.post(
   '/',
   body('email')
     .exists({ checkFalsy: true, checkNull: true })
-    .withMessage('missing required parameter')
+    .withMessage(reqCodes.missing_param)
     .isEmail()
-    .withMessage('invalid email format')
+    .withMessage(reqCodes.invalid_email)
     .normalizeEmail(),
-  body('username', 'missing required parameter').exists().isString(),
+  body('username')
+    .exists()
+    .withMessage(reqCodes.missing_param)
+    .isString()
+    .withMessage(reqCodes.type_mismatch)
+    .trim(),
   body('password')
     .exists()
-    .withMessage('missing required parameter')
+    .withMessage(reqCodes.missing_param)
     .isStrongPassword()
     .withMessage('password is too weak'),
   async (req, res) => {
@@ -51,17 +60,12 @@ router.get('/:id', async (req, res) => {
     const user = await projection.query('get', req.params)
     return res.json(user)
   } catch (error) {
-    const { code, source } = parse(error.message)
-    if (code) {
-      return res.status(400).send({
-        error: {
-          code,
-          source
-        }
-      })
+    const known = parse(error.message)
+    if (known.code === 'unknown') {
+      console.error(error)
+      return res.status(500).json({ error: known })
     }
-    console.error(error)
-    return res.status(500).send('500 Internal Server Error')
+    return res.status(400).json({ error: known })
   }
 })
 
