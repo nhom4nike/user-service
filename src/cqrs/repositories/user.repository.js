@@ -12,7 +12,7 @@ const bcrypt = require('bcrypt')
 /** buiness logic for write operations */
 class UserRepository {
   /**
-   * @param {import('../../database/user.model')} model a mongoose model
+   * @param {import('mongoose').Model} model mongoose user model
    */
   constructor(model) {
     this.model = model
@@ -43,15 +43,21 @@ class UserRepository {
       }
     }
 
-    const secret = test ? password : await bcrypt.genSalt(12)
-    const hashed = test ? password : await bcrypt.hash(password, secret)
+    const hashed = test ? password : await bcrypt.hash(password, 12)
     const document = await this.model.create({
       username: username?.trim(),
       email: email?.trim(),
-      secret,
       password: hashed
     })
     return document.id
+  }
+
+  async activate(id) {
+    return await this.users.findByIdAndUpdate(
+      id,
+      { status: 'active' },
+      { lean: true }
+    )
   }
 
   /**

@@ -13,29 +13,28 @@ module.exports = function (mongoose) {
           type: Schema.Types.String,
           required: true,
           index: true,
-          unquie: true
+          unquie: true,
+          select: true
         },
         email: {
           type: Schema.Types.String,
           required: true,
           index: true,
           unique: true,
+          select: true,
           validate: {
             validator: (s) => validator.isEmail(s),
             message: 'user-model/invalid-email'
           }
         },
-        secret: {
+        status: {
           type: Schema.Types.String,
-          required: true
+          default: 'inactive',
+          select: true
         },
         password: {
           type: Schema.Types.String,
           required: true
-        },
-        status: {
-          type: Schema.Types.String,
-          default: 'inactive'
         }
       },
       {
