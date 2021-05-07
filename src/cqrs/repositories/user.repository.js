@@ -38,7 +38,7 @@ class UserRepository {
       if (!validator.isEmail(email)) {
         throw errors.create('user', 'invalid-email', email)
       }
-      if (!this.validatePassword(password)) {
+      if (!validator.isStrongPassword(password)) {
         throw errors.create('user', 'weak-password', password)
       }
     }
@@ -58,16 +58,6 @@ class UserRepository {
       { status: 'active' },
       { lean: true }
     )
-  }
-
-  /**
-   * @note password must be 8 character-length, must contain at least 1 lowercase character,
-   * 1 uppercase character, 1 digit, 1 special character in !@#$%^&*()\-__+.
-   * @example ^(?=(.*[a-z]){1,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$?}{%^&*()\-_+.[\]]){1,}).{8,}$
-   */
-  validatePassword(password = '') {
-    const regex = /^(?=(.*[a-z]){1,})(?=(.*[A-Z]){1,})(?=(.*[0-9]){1,})(?=(.*[!@#$?}{%^&*()\-_+.[\]]){1,}).{8,}$/g
-    return password.match(regex)
   }
 }
 

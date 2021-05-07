@@ -1,4 +1,4 @@
-const validator = require('validator')
+const validator = require('validator').default
 const { initiTestDB } = require('@/utils/testing')
 const UserRepository = require('@/cqrs/repositories/user.repository')
 const UserModel = require('@/database/user.model')
@@ -63,8 +63,6 @@ test('should these email be invalid', async () => {
 })
 
 test('should password match regex', async () => {
-  const users = new UserRepository(model)
-
   const strongs = [
     'YRwJt+45',
     'U4TsS9z@',
@@ -89,13 +87,12 @@ test('should password match regex', async () => {
     'T$7S6rJH'
   ]
   strongs.forEach((password) => {
-    const yes = users.validatePassword(password)
+    const yes = validator.isStrongPassword(password)
     expect(yes).toBeTruthy()
   })
 })
 
 test('should faild for weak password', async () => {
-  const users = new UserRepository(model)
   const weaks = [
     '123456',
     '123456789',
@@ -119,7 +116,7 @@ test('should faild for weak password', async () => {
     'qqww1122'
   ]
   weaks.forEach((password) => {
-    const yes = users.validatePassword(password)
+    const yes = validator.isStrongPassword(password)
     expect(yes).toBeFalsy()
   })
 })
