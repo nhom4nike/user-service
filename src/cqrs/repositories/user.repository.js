@@ -9,7 +9,7 @@ const bcrypt = require('bcrypt')
  * @property {string} password 128-character hashed password
  */
 
-/** buiness logic for write operations */
+/** business logic for write operations */
 class UserRepository {
   /**
    * @param {import('mongoose').Model} model mongoose user model

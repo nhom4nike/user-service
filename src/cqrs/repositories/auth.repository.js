@@ -1,7 +1,7 @@
 const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
-/** buiness logic for write operations */
+/** business logic for write operations */
 class AuthRepository {
   /**
    * @param {import('mongoose').Model} model mongoose auth model

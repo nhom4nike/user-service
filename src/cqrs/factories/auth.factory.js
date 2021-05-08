@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-/** buiness logic for read operations */
+/** business logic for read operations */
 class AuthFactory {
   /**
    * @typedef {import('mongoose').Model} Model

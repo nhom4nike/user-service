@@ -10,7 +10,7 @@ module.exports = function (mongoose) {
           immutable: true,
           required: true,
           index: true,
-          unquie: true
+          unique: true
         }
       },
       {
