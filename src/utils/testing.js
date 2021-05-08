@@ -10,7 +10,8 @@ module.exports = {
         pass: process.env.MONGO_PASSWORD,
         useNewUrlParser: true,
         useUnifiedTopology: true,
-        useCreateIndex: true
+        useCreateIndex: true,
+        useFindAndModify: false
       }
     )
     await instance.dropDatabase()

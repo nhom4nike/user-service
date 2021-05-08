@@ -124,32 +124,33 @@ test('should faild for weak password', async () => {
 test('should email be unique', async () => {
   const users = new UserRepository(model)
 
-  const task = users.create(
-    { username: 'myname123', email: '123@gmail.com', password: '1' },
-    true
-  )
-  const task1 = users.create(
-    { username: 'myname', email: '123@gmail.com', password: '1' },
-    true
-  )
-  Promise.all([task, task1])
-    .catch(err => expect(err).toBeTruthy())
+  const tasks = [
+    users.create(
+      { username: 'myname123', email: '123@gmail.com', password: '1' },
+      true
+    ),
+    users.create(
+      { username: 'myname', email: '123@gmail.com', password: '1' },
+      true
+    )
+  ]
+  await expect(Promise.all(tasks)).rejects.toThrowError()
 })
 
-test('should username be unique', () => {
+test('should username be unique', async () => {
   const users = new UserRepository(model)
 
-  const task = users.create(
-    { username: 'myname', email: 'abc@gmail.com', password: '1' },
-    true
-  )
-  const task1 = users.create(
-    { username: 'myname', email: 'abcd@gmail.com', password: '1' },
-    true
-  )
-
-  Promise.all([task, task1])
-    .catch(err => expect(err).toBeTruthy())
+  const tasks = [
+    users.create(
+      { username: 'myname', email: 'abc@gmail.com', password: '1' },
+      true
+    ),
+    users.create(
+      { username: 'myname', email: 'abcd@gmail.com', password: '1' },
+      true
+    )
+  ]
+  await expect(Promise.all(tasks)).rejects.toThrowError()
 })
 
 test('should activate user', async () => {

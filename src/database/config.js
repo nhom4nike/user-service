@@ -8,7 +8,8 @@ async function connect() {
       pass: process.env.MONGO_PASSWORD,
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      useCreateIndex: true
+      useCreateIndex: true,
+      useFindAndModify: false
     })
     .then((instance) => {
       console.log('MongoDB Connection Succeeded.')
