@@ -13,7 +13,7 @@ module.exports = function (mongoose) {
           type: Schema.Types.String,
           required: true,
           index: true,
-          unquie: true,
+          unique: true,
           select: true
         },
         email: {
