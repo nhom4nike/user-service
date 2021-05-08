@@ -6,6 +6,8 @@ const codes = {
   },
   user: {
     invalid_id: 'user/invalid-id',
+    duplicate_username: 'user/duplicate_username',
+    duplicate_email: 'user/duplicate-email',
     invalid_email: 'user/invalid-email',
     weak_password: 'user/weak-password'
   }
@@ -20,6 +22,10 @@ function map(code) {
       return 'password is too weak'
     case codes.user.invalid_email:
       return 'invalid email format'
+    case codes.user.duplicate_username:
+      return 'username already in use'
+    case codes.user.duplicate_email:
+      return 'email already in use'
     case codes.req.invalid_email:
       return 'invalid email format'
     case codes.req.missing_param:
