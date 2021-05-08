@@ -150,7 +150,6 @@ test('should username be unique', async () => {
       true
     )
   ]
-
   await expect(Promise.all(tasks)).rejects.toThrowError()
 })
 
