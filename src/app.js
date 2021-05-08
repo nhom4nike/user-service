@@ -4,6 +4,8 @@ const { json } = require('body-parser')
 const cookieParser = require('cookie-parser')
 const eureka = require('./eureka')
 const database = require('./database/config')
+const cors = require('cors')
+
 
 if (!process.env.EUREKA_DISABLE) eureka.start()
 
@@ -17,6 +19,7 @@ module.exports = {
     server.use(json())
     server.use(cookieParser())
     server.use(helmet())
+    server.use(cors())
 
     // because each route uses mongoose models, mongoose must be connected to database
     const routes = require('./routes')
