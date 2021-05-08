@@ -17,19 +17,56 @@ module.exports = function handler({ user, auth }) {
       const userModel = await user.projection.query('findByEmail', email)
 
       if (!userModel) {
-        throw errors.create(errors.codes.login.invalid_email, email)
+        throw errors.create(errors.codes.user.wrong_email, email)
       }
       if (!bcrypt.compareSync(password, userModel.password)) {
-        throw errors.create(errors.codes.login.invalid_password, password)
+        throw errors.create(errors.codes.user.wrong_password, password)
       }
 
-      const authModel = await auth.aggregate.command('sign', userModel)
+      const accessToken = await auth.aggregate.command(
+        'generateAccessToken',
+        userModel
+      )
+      const refreshToken = await auth.aggregate.command(
+        'generateRefreshToken',
+        userModel
+      )
 
       return {
         id: userModel.id,
         email: userModel.email,
-        token: authModel.token
+        accessToken,
+        refreshToken
       }
+    },
+
+    // for verified route
+    verify: async function (req) {
+      const authHeader = req.headers.authorization
+      const token = authHeader && authHeader.split(' ')[1]
+      if (!token) {
+        throw errors.create(errors.codes.auth.token_missing)
+      }
+
+      const payload = await auth.projection.query('verifyAccessToken', token)
+      return payload
+    },
+
+    // for refresh token
+    token: async function (req) {
+      const token = await auth.projection.query('get', req.body)
+      if (!token) {
+        throw errors.create(errors.codes.auth.token_invalid, req.body.token)
+      }
+
+      const payload = await auth.projection.query('verifyRefreshToken', token)
+      console.log(payload)
+      return await auth.aggregate.command('generateAccessToken', payload)
+    },
+
+    // delete refresh token
+    logout: async function (req) {
+      return await auth.aggregate.command('deleteToken', req.body)
     }
   }
 }

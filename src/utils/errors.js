@@ -9,11 +9,14 @@ const codes = {
     duplicate_username: 'user/duplicate_username',
     duplicate_email: 'user/duplicate-email',
     invalid_email: 'user/invalid-email',
-    weak_password: 'user/weak-password'
+    weak_password: 'user/weak-password',
+    wrong_email: 'user/wrong_email',
+    wrong_password: 'user/wrong_password'
   },
-  login: {
-    invalid_email: 'login/invalid-email',
-    invalid_password: 'login/invalid-password'
+  auth: {
+    token_missing: 'token/missing',
+    token_invalid: 'token/invalid',
+    token_expired: 'token/expired'
   }
 }
 
@@ -30,16 +33,23 @@ function map(code) {
       return 'username already in use'
     case codes.user.duplicate_email:
       return 'email already in use'
+    case codes.user.wrong_email:
+      return 'email does not exits on system'
+    case codes.user.wrong_password:
+      return 'password is not correct'
     case codes.req.invalid_email:
       return 'invalid email format'
     case codes.req.missing_param:
       return 'missing required parameter'
     case codes.req.type_mismatch:
       return 'value has wrong type'
-    case codes.login.invalid_email:
-      return 'email does not exits on system'
-    case codes.login.invalid_password:
-      return 'password is not correct'
+    case codes.auth.token_missing:
+      return 'missing header token'
+    case codes.auth.token_invalid:
+      return 'token is invalid please try again'
+    case codes.auth.token_expired:
+      return 'token is expired please refresh token'
+
     default:
       return undefined
   }

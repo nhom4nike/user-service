@@ -1,22 +1,35 @@
+require('dotenv').config()
+
 /**
- * @typedef {Object} GetUserQuery
- * @property {string} id user's id
+ * @typedef {Object} GetTokenQuery
+ * @property {string} token token
  */
 
 /** user's query handler */
 class AuthProjection {
   /**
-   * @param {import('../factories/user.factory')} factory
+   * @param {import('../factories/auth.factory')} factory
    */
   constructor(factory) {
     this.factory = factory
   }
 
   /**
-   * @param {GetUserQuery} query
+   * @param {GetTokenQuery} query
    */
   async _get(query) {
     return this.factory.get(query.token)
+  }
+
+  /**
+   * @param {string} query
+   */
+  async _verifyAccessToken(query) {
+    return this.factory.verify(query, process.env.ACCESS_TOKEN_SECRET)
+  }
+
+  async _verifyRefreshToken(query) {
+    return this.factory.verify(query, process.env.REFRESH_TOKEN_SECRET)
   }
 
   /**
@@ -28,6 +41,10 @@ class AuthProjection {
     switch (name) {
       case 'get':
         return this._get(query)
+      case 'verifyAccessToken':
+        return this._verifyAccessToken(query)
+      case 'verifyRefreshToken':
+        return this._verifyRefreshToken(query)
       default:
         throw new Error('unknown command: ' + name)
     }

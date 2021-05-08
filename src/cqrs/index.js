@@ -16,7 +16,7 @@ module.exports = function (mongoose) {
       aggregate: new UserAggregate(new UserRepository(userModel))
     },
     auth: {
-      projection: new AuthProjection(new AuthFactory(userModel, authModel)),
+      projection: new AuthProjection(new AuthFactory(authModel)),
       aggregate: new AuthAggregate(new AuthRepository(authModel))
     }
   }

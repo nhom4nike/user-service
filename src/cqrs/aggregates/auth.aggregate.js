@@ -1,11 +1,11 @@
+require('dotenv').config()
 /**
- * @typedef {Object} RegistrationPayload
- * @property {string} email
- * @property {string} password sha512-hash password
- * @property {boolean} verified whether this user's email has been verified
+ * @typedef {Object} ObjectPayload
+ * @property {string} token token
+ * @property {boolean} secret to verify token
  */
 
-/** user's commands handler */
+/** auth's commands handler */
 class AuthAggregate {
   /**
    * @param {import('../repositories/auth.repository')} repository
@@ -15,19 +15,59 @@ class AuthAggregate {
   }
 
   /**
-   * @param {RegistrationPayload} payload
+   * @param {ObjectPayload} payload
    */
-  async _sign(payload) {
-    return this.repository.sign(payload)
+  async _generateAccessToken(payload) {
+    return this.repository.generateToken(
+      payload,
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: '15s' }
+    )
   }
 
   /**
-   * @param {'create'}name the name of command
+   * @param {ObjectPayload} payload
+   */
+  async _generateRefreshToken(payload) {
+    const refreshToken = await this.repository.generateToken(
+      payload,
+      process.env.REFRESH_TOKEN_SECRET
+    )
+    this._saveToken(refreshToken)
+    return refreshToken
+  }
+
+  /**
+   * @param {ObjectPayload} payload
+   */
+  async _saveToken(token) {
+    return this.repository.saveToken(token)
+  }
+
+  /**
+   * @param {ObjectPayload} payload
+   */
+  async _deleteToken(token) {
+    return this.repository.deleteToken(token)
+  }
+
+  /**
+   * @param {'generateAccessToken'}name the name of command
    * @param {Object}payload additional conditions for the query
    */
   async command(name, payload) {
-    if (name === 'sign') return this._sign(payload)
-    throw new Error('unknown command: ' + name)
+    switch (name) {
+      case 'generateAccessToken':
+        return this._generateAccessToken(payload)
+      case 'generateRefreshToken':
+        return this._generateRefreshToken(payload)
+      case 'saveToken':
+        return this._saveToken(payload)
+      case 'deleteToken':
+        return this._deleteToken(payload)
+      default:
+        throw new Error('unknown command: ' + name)
+    }
   }
 }
 

@@ -1,37 +1,33 @@
 const jwt = require('jsonwebtoken')
+const errors = require('../../utils/errors')
 
 /** business logic for read operations */
 class AuthFactory {
   /**
    * @typedef {import('mongoose').Model} Model
    * @param {Object} models mongoose's models
-   * @param {Model} models.users
-   * @param {Model} models.auths
+   * @param {Model} models.auth
    */
-  constructor({ users, auths }) {
-    this.users = users
-    this.auths = auths
+  constructor(auth) {
+    this.auth = auth
   }
 
-  /** verify given jwt, this token will be delete if exists */
-  async verify(value) {
-    const document = await this.users.findOneAndDelete({
-      token: value
-    })
-    if (!document) return false
-
-    // verify if token has been expired
-    const { token, secret } = document
+  async verify(token, secret) {
     try {
-      return jwt.verify(token, secret) && true
+      return jwt.verify(token, secret)
     } catch (error) {
-      if (error.name === 'TokenExpiredError') return false
+      if (error.name === 'TokenExpiredError') {
+        throw errors.create(errors.codes.auth.token_expired, token)
+      }
+      if (error.name === 'JsonWebTokenError') {
+        throw errors.create(errors.codes.auth.token_invalid, token)
+      }
       throw error
     }
   }
 
   async get(token) {
-    return this.auths.findOne({ token })
+    return this.auth.findOne({ token })
   }
 }
 

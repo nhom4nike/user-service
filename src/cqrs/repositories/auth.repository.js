@@ -10,12 +10,16 @@ class AuthRepository {
     this.model = model
   }
 
-  /** create a jwt for single use, ie. email verification */
-  async sign(id) {
-    const secret = crypto.randomBytes(64).toString()
-    const token = jwt.sign({ iss: id }, secret, { expiresIn: 300 })
-    const document = await this.model.create({ token, secret })
-    return document
+  async generateToken(payload, secret, options) {
+    return jwt.sign({ payload }, secret, options)
+  }
+
+  async saveToken(token) {
+    return await this.model.create({ token })
+  }
+
+  async deleteToken(token) {
+    return await this.model.findOneAndDelete({ token: token })
   }
 }
 
