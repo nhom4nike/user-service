@@ -29,6 +29,10 @@ class AuthFactory {
       throw error
     }
   }
+
+  async get(token) {
+    return this.auths.findOne({ token })
+  }
 }
 
 module.exports = AuthFactory

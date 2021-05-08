@@ -11,6 +11,17 @@ class UserFactory {
     if (!user) throw errors.create('user', 'not-found', id)
     return user
   }
+
+  async findByEmail(email) {
+    return await this.model.findOne({ email }) || null
+
+    // if (!user) {
+    //   throw errors.create(errors.codes.login.invalid_email, email)
+    // }
+    // if (!bcrypt.compareSync(password, user.password)) {
+    //   throw errors.create(errors.codes.login.invalid_password, password)
+    // }
+  }
 }
 
 module.exports = UserFactory

@@ -47,6 +47,17 @@ router.post(
   }
 )
 
+router.post('/login', async (req, res, next) => {
+  try {
+    const userInfo = await handler.login(req)
+    res.json(userInfo)
+  } catch (error) {
+    const known = parse(error)
+    const status = known.code ? 400 : 500
+    return res.status(status).json({ error: known })
+  }
+})
+
 router.get('/:id', async (req, res) => {
   try {
     const user = await handler.get(req)

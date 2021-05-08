@@ -14,7 +14,7 @@ class AuthRepository {
   async sign(id) {
     const secret = crypto.randomBytes(64).toString()
     const token = jwt.sign({ iss: id }, secret, { expiresIn: 300 })
-    const document = await this.auths.create({ token, secret })
+    const document = await this.model.create({ token, secret })
     return document
   }
 }

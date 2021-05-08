@@ -4,7 +4,7 @@
  */
 
 /** user's query handler */
-class UserProjection {
+class AuthProjection {
   /**
    * @param {import('../factories/user.factory')} factory
    */
@@ -16,11 +16,7 @@ class UserProjection {
    * @param {GetUserQuery} query
    */
   async _get(query) {
-    return this.factory.get(query.id)
-  }
-
-  async _findByEmail(query) {
-    return this.factory.findByEmail(query)
+    return this.factory.get(query.token)
   }
 
   /**
@@ -32,12 +28,10 @@ class UserProjection {
     switch (name) {
       case 'get':
         return this._get(query)
-      case 'findByEmail':
-        return this._findByEmail(query)
       default:
         throw new Error('unknown command: ' + name)
     }
   }
 }
 
-module.exports = UserProjection
+module.exports = AuthProjection

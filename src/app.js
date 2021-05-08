@@ -6,7 +6,6 @@ const eureka = require('./eureka')
 const database = require('./database/config')
 const cors = require('cors')
 
-
 if (!process.env.EUREKA_DISABLE) eureka.start()
 
 module.exports = {

@@ -10,6 +10,10 @@ const codes = {
     duplicate_email: 'user/duplicate-email',
     invalid_email: 'user/invalid-email',
     weak_password: 'user/weak-password'
+  },
+  login: {
+    invalid_email: 'login/invalid-email',
+    invalid_password: 'login/invalid-password'
   }
 }
 
@@ -32,6 +36,10 @@ function map(code) {
       return 'missing required parameter'
     case codes.req.type_mismatch:
       return 'value has wrong type'
+    case codes.login.invalid_email:
+      return 'email does not exits on system'
+    case codes.login.invalid_password:
+      return 'password is not correct'
     default:
       return undefined
   }
