@@ -51,7 +51,9 @@ module.exports = {
   },
 
   /** parse Error.prototype.message */
-  parse: function ({ message }) {
+  parse: function (error) {
+    const { message } = error
+
     // parse mongoose error
     const groups = message.match(/(ObjectId).+"(\w+)".+"(\w+)".+"(\w+)"/)
     if (groups) {
@@ -66,6 +68,9 @@ module.exports = {
     // parse defined error
     const [code, value] = message.split(':', 2)
     if (map(code)) return { code, value, message: map(code) }
+
+    // unhandled error
+    console.error(error)
     return {
       message: 'Internal Server Error'
     }

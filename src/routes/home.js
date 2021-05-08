@@ -1,6 +1,7 @@
 const { body, validationResult } = require('express-validator')
 const express = require('express')
 const cqrs = require('../cqrs')(global.mongoose)
+const handler = require('../controllers/home.controller')(cqrs)
 const {
   format,
   parse,
@@ -29,43 +30,31 @@ router.post(
     .isStrongPassword()
     .withMessage('password is too weak'),
   async (req, res) => {
+    // request validation
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: format(errors) })
     }
 
     try {
-      const { aggregate } = cqrs.user
-      const id = await aggregate.command('create', req.body)
+      const id = await handler.create(req)
       return res.status(201).json({ id })
     } catch (error) {
-      const { code, source } = parse(error.message)
-      if (code) {
-        return res.status(400).send({
-          error: {
-            code,
-            source
-          }
-        })
-      }
-      console.error(error)
-      return res.status(500).send('500 Internal Server Error')
+      const known = parse(error)
+      const status = known.code ? 400 : 500
+      return res.status(status).json({ error: known })
     }
   }
 )
 
 router.get('/:id', async (req, res) => {
   try {
-    const { projection } = cqrs.user
-    const user = await projection.query('get', req.params)
+    const user = await handler.get(req)
     return res.json(user)
   } catch (error) {
-    const known = parse(error.message)
-    if (known.code === 'unknown') {
-      console.error(error)
-      return res.status(500).json({ error: known })
-    }
-    return res.status(400).json({ error: known })
+    const known = parse(error)
+    const status = known.code ? 400 : 500
+    return res.status(status).json({ error: known })
   }
 })
 

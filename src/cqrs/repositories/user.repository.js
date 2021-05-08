@@ -36,10 +36,10 @@ class UserRepository {
     if (!test) {
       // perform validation
       if (!validator.isEmail(email)) {
-        throw errors.create('user', 'invalid-email', email)
+        throw errors.create(errors.codes.user.invalid_email, email)
       }
       if (!validator.isStrongPassword(password)) {
-        throw errors.create('user', 'weak-password', password)
+        throw errors.create(errors.codes.user.weak_password, password)
       }
     }
 
