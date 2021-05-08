@@ -53,7 +53,7 @@ class UserRepository {
   }
 
   async activate(id) {
-    return await this.users.findByIdAndUpdate(
+    return await this.model.findByIdAndUpdate(
       id,
       { status: 'active' },
       { lean: true }

@@ -1,5 +1,5 @@
 const validator = require('validator').default
-const { initiTestDB } = require('@/utils/testing')
+const { initTestDB } = require('@/utils/testing')
 const UserRepository = require('@/cqrs/repositories/user.repository')
 const UserModel = require('@/database/user.model')
 
@@ -8,7 +8,7 @@ let mongoose
 
 let model
 beforeAll(async () => {
-  mongoose = await initiTestDB('user_repository_test')
+  mongoose = await initTestDB('user_repository_test')
   model = UserModel(mongoose)
 })
 
@@ -132,7 +132,7 @@ test('should email be unique', async () => {
     { username: 'myname', email: '123@gmail.com', password: '1' },
     true
   )
-  expect(task).rejects.toThrowError()
+  await expect(task).rejects.toThrowError()
 })
 
 test('should username be unique', async () => {
@@ -146,5 +146,21 @@ test('should username be unique', async () => {
     { username: 'myname', email: 'abcd@gmail.com', password: '1' },
     true
   )
-  expect(task).rejects.toThrowError()
+  await expect(task).rejects.toThrowError()
+})
+
+test('should activate user', async () => {
+  const users = new UserRepository(model)
+  const id = await users.create(
+    {
+      username: 'my really Long Name',
+      email: 'amy-fucking-emailk@gmail.com',
+      password: '1'
+    },
+    true
+  )
+  await users.activate(id)
+
+  const document = await users.model.findById(id, 'status', { lean: true })
+  expect(document.status).toBeTruthy()
 })
