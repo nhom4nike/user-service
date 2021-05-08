@@ -46,12 +46,12 @@ module.exports = {
   },
 
   /** create error helper */
-  create: function (scope, type, value) {
-    return new Error(`${scope}/${type}:${value}`)
+  create: function (code, value) {
+    return new Error(`${code}:${value}`)
   },
 
   /** parse Error.prototype.message */
-  parse: function (message = '') {
+  parse: function ({ message }) {
     // parse mongoose error
     const groups = message.match(/(ObjectId).+"(\w+)".+"(\w+)".+"(\w+)"/)
     if (groups) {
@@ -67,8 +67,6 @@ module.exports = {
     const [code, value] = message.split(':', 2)
     if (map(code)) return { code, value, message: map(code) }
     return {
-      code: 'unknown',
-      value: 'unknown',
       message: 'Internal Server Error'
     }
   },
