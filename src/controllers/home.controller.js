@@ -80,10 +80,10 @@ module.exports = function handler({ user, auth }) {
         return await auth.aggregate.command('generateAccessToken', payload)
       } catch (error) {
         if (error.name === 'TokenExpiredError') {
-          throw errors.create(errors.codes.auth.token_expired, token)
+          throw errors.create(errors.codes.auth.token_expired, tokenModel.token)
         }
         if (error.name === 'JsonWebTokenError') {
-          throw errors.create(errors.codes.auth.token_invalid, token)
+          throw errors.create(errors.codes.auth.token_invalid, tokenModel.token)
         }
       }
     },
