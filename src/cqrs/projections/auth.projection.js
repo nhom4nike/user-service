@@ -5,6 +5,13 @@ require('dotenv').config()
  * @property {string} token token
  */
 
+/**
+ * @typedef {'get' |
+ * 'verifyAccessToken' |
+ * 'verifyRefreshToken'
+ * } QueryNames
+ */
+
 /** user's query handler */
 class AuthProjection {
   /**
@@ -33,8 +40,7 @@ class AuthProjection {
   }
 
   /**
-   * @param {Object} command
-   * @param {'get'} name the name of query command
+   * @param {QueryNames} name the name of query command
    * @param {Object} query additional conditions for the query
    */
   async query(name, query) {

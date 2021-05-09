@@ -4,6 +4,14 @@ require('dotenv').config()
  * @property {string} token
  */
 
+/**
+ * @typedef {'generateAccessToken'|
+ * 'generateRefreshToken'|
+ * 'saveToken'|
+ * 'deleteToken'
+ * } CommandNames
+ */
+
 /** auth's commands handler */
 class AuthAggregate {
   /**
@@ -51,7 +59,7 @@ class AuthAggregate {
   }
 
   /**
-   * @param {'generateAccessToken'|'generateRefreshToken'|'saveToken'|'deleteToken'} name the name of command
+   * @param {CommandNames} name the name of command
    * @param {Object} payload command's one or more arguments
    */
   async command(name, payload) {
