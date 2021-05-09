@@ -13,6 +13,7 @@ async function connect() {
     })
     .then((instance) => {
       console.log('MongoDB Connection Succeeded.')
+      instance.pluralize(null)
       return instance
     })
     .catch((error) => console.error('Error in DB connection: ' + error))
