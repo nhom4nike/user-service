@@ -2,7 +2,8 @@ const codes = {
   req: {
     missing_param: 'req/missing-param',
     invalid_email: 'req/invalid-email',
-    type_mismatch: 'req/type-mismatch'
+    type_mismatch: 'req/type-mismatch',
+    missing_header: 'req/missing-header'
   },
   user: {
     invalid_id: 'user/invalid-id',
