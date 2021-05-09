@@ -10,3 +10,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.close(true)
 })
+
+test('should pass', () => {
+  expect(true).toBeTruthy()
+})

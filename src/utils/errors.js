@@ -6,13 +6,13 @@ const codes = {
     missing_header: 'req/missing-header'
   },
   user: {
-    invalid_id: 'user/invalid-id',
-    duplicate_username: 'user/duplicate-username',
-    duplicate_email: 'user/duplicate-email',
-    invalid_email: 'user/invalid-email',
-    weak_password: 'user/weak-password',
-    wrong_email: 'user/wrong-email',
-    wrong_password: 'user/wrong_password'
+    invalid_id: 'users/invalid-id',
+    duplicate_username: 'users/duplicate-username',
+    duplicate_email: 'users/duplicate-email',
+    invalid_email: 'users/invalid-email',
+    weak_password: 'users/weak-password',
+    wrong_email: 'users/wrong-email',
+    wrong_password: 'users/wrong_password'
   },
   auth: {
     token_missing: 'token/missing',
@@ -75,18 +75,32 @@ module.exports = {
     return new Error(`${code}:${value}`)
   },
 
-  /** parse Error.prototype.message */
+  /** parse Error instance */
   parse: function (error) {
     const { message } = error
 
     // parse mongoose error
-    const groups = message.match(/(ObjectId).+"(\w+)".+"(\w+)".+"(\w+)"/)
-    if (groups) {
-      const code = `${groups[4]}/invalid-id`
-      return {
-        code,
-        message: map(code),
-        value: groups[2]
+    if (error.name === 'CastError') {
+      if (error.kind === 'ObjectId') {
+        // invalid id error
+        return {
+          code: codes.user.invalid_id,
+          message: map(codes.user.invalid_id),
+          value: error.value
+        }
+      }
+    } else if (error.name === 'MongoError') {
+      // unique field error
+      const groups = error.message.match(
+        /duplicate.*\.(\w+).*index: (\w+)_\d{1,}.*{ \2: "(.+)" }/
+      )
+      if (groups) {
+        const code = `${groups[1]}/duplicate-${groups[2]}`
+        return {
+          code,
+          message: map(code),
+          value: groups[3]
+        }
       }
     }
 

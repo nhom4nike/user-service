@@ -45,14 +45,6 @@ class UserRepository {
 
     const hashed = test ? password : await bcrypt.hash(password, 12)
 
-    if (await this.model.findOne({ email: email })) {
-      throw errors.create(errors.codes.user.duplicate_email, email)
-    }
-
-    if (await this.model.findOne({ username: username })) {
-      throw errors.create(errors.codes.user.duplicate_username, username)
-    }
-
     const document = await this.model.create({
       username: username?.trim(),
       email: email?.trim(),
@@ -62,7 +54,7 @@ class UserRepository {
   }
 
   async activate(id) {
-    return await this.model.findByIdAndUpdate(
+    return this.model.findByIdAndUpdate(
       id,
       { status: 'active' },
       { lean: true }

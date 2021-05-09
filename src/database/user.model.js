@@ -1,5 +1,8 @@
 const validator = require('validator').default
 const { Schema } = require('mongoose')
+const {
+  codes: { user }
+} = require('../utils/errors')
 
 /**
  * @param {import('mongoose').Connection} mongoose
@@ -24,7 +27,7 @@ module.exports = function (mongoose) {
           select: true,
           validate: {
             validator: (s) => validator.isEmail(s),
-            message: 'user-model/invalid-email'
+            message: user.invalid_email
           }
         },
         status: {

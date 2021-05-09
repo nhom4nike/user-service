@@ -1,9 +1,10 @@
 const { body, validationResult } = require('express-validator')
 const jwt = require('jsonwebtoken')
 const express = require('express')
+const CQRS = require('../cqrs')
 const {
   user: { projection }
-} = require('../cqrs')(global.mongoose)
+} = new CQRS(global.mongoose)
 const {
   codes: { req },
   format
