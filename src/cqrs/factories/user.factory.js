@@ -2,6 +2,7 @@ const errors = require('../../utils/errors')
 
 /** business logic for read operations */
 class UserFactory {
+  /** @param {import('mongoose').Model} model */
   constructor(model) {
     this.model = model
   }
@@ -13,7 +14,7 @@ class UserFactory {
   }
 
   async findByEmail(email) {
-    return await this.model.findOne({ email }) || null
+    return (await this.model.findOne({ email })) || null
 
     // if (!user) {
     //   throw errors.create(errors.codes.login.invalid_email, email)
