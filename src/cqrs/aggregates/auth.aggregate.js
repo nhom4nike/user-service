@@ -21,7 +21,7 @@ class AuthAggregate {
     return this.repository.generateToken(
       payload,
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15s' }
+      { expiresIn: '15m' }
     )
   }
 
