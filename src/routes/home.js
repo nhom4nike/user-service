@@ -70,7 +70,7 @@ router.post(
 )
 
 router.post(
-  '/token',
+  '/refresh',
   body('token').exists().withMessage(reqCodes.missing_param),
   async (req, res, next) => {
     // request validation
@@ -80,7 +80,7 @@ router.post(
     }
 
     try {
-      const accessToken = await handler.token(req)
+      const accessToken = await handler.refresh(req)
       return res.json({ accessToken })
     } catch (error) {
       const known = parse(error)

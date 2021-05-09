@@ -57,7 +57,7 @@ module.exports = function handler({ user, auth }) {
     },
 
     // for refresh token
-    token: async function (req) {
+    refresh: async function (req) {
       const tokenModel = await auth.projection.query('get', req.body)
       if (!tokenModel) {
         throw errors.create(errors.codes.auth.token_invalid, req.body.token)
