@@ -1,7 +1,11 @@
 /**
  * @typedef {Object} RegistrationPayload
  * @property {string} email
- * @property {string} password sha512-hash password
+ * @property {string} password
+ */
+
+/**
+ * @typedef {'create'} CommandNames
  */
 
 /** user's commands handler */
@@ -22,7 +26,7 @@ class UserAggregate {
   }
 
   /**
-   * @param {'create'} name the name of command
+   * @param {CommandNames} name the name of command
    * @param {Object} payload command's one or more arguments
    */
   async command(name, payload) {

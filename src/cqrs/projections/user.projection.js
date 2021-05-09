@@ -3,6 +3,12 @@
  * @property {string} id user's id
  */
 
+/**
+ * @typedef {'get' |
+ * 'findByEmail'
+ * } CommandNames
+ */
+
 /** user's query handler */
 class UserProjection {
   /**
@@ -24,8 +30,7 @@ class UserProjection {
   }
 
   /**
-   * @param {Object} command
-   * @param {'get'} name the name of query command
+   * @param {CommandNames} name the name of query command
    * @param {Object} query additional conditions for the query
    */
   async query(name, query) {
