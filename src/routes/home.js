@@ -127,15 +127,8 @@ router.use(
   }
 )
 
-router.get('/:id', async (req, res) => {
-  try {
-    const user = await handler.get(req)
-    return res.json(user)
-  } catch (error) {
-    const known = parse(error)
-    const status = known.code ? 400 : 500
-    return res.status(status).json({ error: known })
-  }
+router.get('/info', async (req, res) => {
+  res.json(req.user)
 })
 
 // catch 404

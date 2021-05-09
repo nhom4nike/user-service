@@ -53,8 +53,8 @@ module.exports = function handler({ user, auth }) {
       }
 
       try {
-        const payload = await auth.projection.query('verifyAccessToken', token)
-        return payload
+        const authData = await auth.projection.query('verifyAccessToken', token)
+        return authData.payload
       } catch (error) {
         if (error.name === 'TokenExpiredError') {
           throw errors.create(errors.codes.auth.token_expired, token)
