@@ -10,7 +10,7 @@ if (!process.env.EUREKA_DISABLE) eureka.start()
 
 module.exports = {
   async setup() {
-    // connect to database
+    // connect to database, this must be call before importing any routes
     global.mongoose = await database.connect()
 
     // setup express server

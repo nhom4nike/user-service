@@ -2,22 +2,23 @@ const { UserAggregate, AuthAggregate } = require('../cqrs/aggregates')
 const { UserFactory, AuthFactory } = require('../cqrs/factories')
 const { UserProjection, AuthProjection } = require('../cqrs/projections')
 const { UserRepository, AuthRepository } = require('../cqrs/repositories')
-const UserModel = require('../database/user.model')
-const AuthModel = require('../database/auth.model')
 
 class CQRS {
-  constructor(mongoose) {
-    const userModel = UserModel(mongoose)
-    const authModel = AuthModel(mongoose)
-
+  /**
+   * @typedef {import('mongoose').Model} Model
+   * @param {Object} models mongoose's models
+   * @param {Model} models.user
+   * @param {Model} models.auth
+   */
+  constructor({ user, auth }) {
     this.user = {
-      projection: new UserProjection(new UserFactory(userModel)),
-      aggregate: new UserAggregate(new UserRepository(userModel))
+      projection: new UserProjection(new UserFactory(user)),
+      aggregate: new UserAggregate(new UserRepository(user))
     }
 
     this.auth = {
-      projection: new AuthProjection(new AuthFactory(authModel)),
-      aggregate: new AuthAggregate(new AuthRepository(authModel))
+      projection: new AuthProjection(new AuthFactory(auth)),
+      aggregate: new AuthAggregate(new AuthRepository(auth))
     }
   }
 }

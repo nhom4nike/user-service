@@ -1,10 +1,7 @@
-const createError = require('http-errors')
-const { body, validationResult } = require('express-validator')
 const express = require('express')
-const CQRS = require('../cqrs')
-const handler = require('../controllers/home.controller')(
-  new CQRS(global.mongoose)
-)
+const { body, validationResult, header } = require('express-validator')
+const { home: handler } = require('../controllers')
+
 const {
   format,
   parse,
@@ -114,17 +111,21 @@ router.delete(
 )
 // for every route except /register /login /logout /token
 // must add Header Token:  Authorization:  Bearer 'AccessToken'
-router.use('/', async (req, res, next) => {
-  try {
-    const payload = await handler.verify(req)
-    req.user = payload
-    next()
-  } catch (error) {
-    const known = parse(error)
-    const status = known.code ? 401 : 500
-    return res.status(status).json({ error: known })
+router.use(
+  '/',
+  header('authorization', reqCodes.missing_header).exists(),
+  async (req, res, next) => {
+    try {
+      const payload = await handler.verify(req)
+      req.user = payload
+      next()
+    } catch (error) {
+      const known = parse(error)
+      const status = known.code ? 401 : 500
+      return res.status(status).json({ error: known })
+    }
   }
-})
+)
 
 router.get('/:id', async (req, res) => {
   try {
