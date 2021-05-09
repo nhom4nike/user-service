@@ -52,8 +52,17 @@ module.exports = function handler({ user, auth }) {
         throw errors.create(errors.codes.auth.token_missing)
       }
 
-      const payload = await auth.projection.query('verifyAccessToken', token)
-      return payload
+      try {
+        const payload = await auth.projection.query('verifyAccessToken', token)
+        return payload
+      } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+          throw errors.create(errors.codes.auth.token_expired, token)
+        }
+        if (error.name === 'JsonWebTokenError') {
+          throw errors.create(errors.codes.auth.token_invalid, token)
+        }
+      }
     },
 
     // for refresh token
@@ -63,12 +72,20 @@ module.exports = function handler({ user, auth }) {
         throw errors.create(errors.codes.auth.token_invalid, req.body.token)
       }
 
-      const payload = await auth.projection.query(
-        'verifyRefreshToken',
-        tokenModel.token
-      )
-      console.log(payload)
-      return await auth.aggregate.command('generateAccessToken', payload)
+      try {
+        const payload = await auth.projection.query(
+          'verifyRefreshToken',
+          tokenModel.token
+        )
+        return await auth.aggregate.command('generateAccessToken', payload)
+      } catch (error) {
+        if (error.name === 'TokenExpiredError') {
+          throw errors.create(errors.codes.auth.token_expired, token)
+        }
+        if (error.name === 'JsonWebTokenError') {
+          throw errors.create(errors.codes.auth.token_invalid, token)
+        }
+      }
     },
 
     // delete refresh token

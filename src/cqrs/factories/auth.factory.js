@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken')
-const errors = require('../../utils/errors')
 
 /** business logic for read operations */
 class AuthFactory {
@@ -12,17 +11,7 @@ class AuthFactory {
   }
 
   async verify(token, secret) {
-    try {
-      return jwt.verify(token, secret)
-    } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        throw errors.create(errors.codes.auth.token_expired, token)
-      }
-      if (error.name === 'JsonWebTokenError') {
-        throw errors.create(errors.codes.auth.token_invalid, token)
-      }
-      throw error
-    }
+    return jwt.verify(token, secret)
   }
 
   async get(token) {
