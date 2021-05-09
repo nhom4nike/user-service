@@ -15,9 +15,9 @@ const codes = {
     wrong_password: 'users/wrong_password'
   },
   auth: {
-    token_missing: 'token/missing',
-    token_invalid: 'token/invalid',
-    token_expired: 'token/expired'
+    token_missing: 'auths/missing-token',
+    token_invalid: 'auths/invalid-token',
+    token_expired: 'auths/expired-token'
   }
 }
 
