@@ -15,7 +15,7 @@ beforeEach(() => {
   mockCreate.mockClear()
 })
 
-test('should constructor be call', () => {
+test('should constructors be called', () => {
   const aggregate = new UserAggregate(new UserRepository())
   expect(aggregate).toBeTruthy()
   expect(UserRepository).toBeCalledTimes(1)
