@@ -1,8 +1,7 @@
 require('dotenv').config()
 /**
- * @typedef {Object} ObjectPayload
- * @property {string} token token
- * @property {boolean} secret to verify token
+ * @typedef {Object} AuthToken
+ * @property {string} token
  */
 
 /** auth's commands handler */
@@ -15,18 +14,18 @@ class AuthAggregate {
   }
 
   /**
-   * @param {ObjectPayload} payload
+   * @param {AuthToken} payload
    */
   async _generateAccessToken(payload) {
     return this.repository.generateToken(
       payload,
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '15s' }
+      { expiresIn: '15m' }
     )
   }
 
   /**
-   * @param {ObjectPayload} payload
+   * @param {AuthToken} payload
    */
   async _generateRefreshToken(payload) {
     const refreshToken = await this.repository.generateToken(
@@ -38,22 +37,22 @@ class AuthAggregate {
   }
 
   /**
-   * @param {ObjectPayload} payload
+   * @param {AuthToken} payload
    */
   async _saveToken(token) {
     return this.repository.saveToken(token)
   }
 
   /**
-   * @param {ObjectPayload} payload
+   * @param {AuthToken} payload
    */
   async _deleteToken(token) {
     return this.repository.deleteToken(token)
   }
 
   /**
-   * @param {'generateAccessToken'}name the name of command
-   * @param {Object}payload additional conditions for the query
+   * @param {'generateAccessToken'|'generateRefreshToken'|'saveToken'|'deleteToken'} name the name of command
+   * @param {Object} payload command's one or more arguments
    */
   async command(name, payload) {
     switch (name) {

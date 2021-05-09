@@ -1,4 +1,3 @@
-const crypto = require('crypto')
 const jwt = require('jsonwebtoken')
 
 /** business logic for write operations */

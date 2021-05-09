@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
  * @typedef {Object} UserRegistration
  * @property {string} email
  * @property {string} username
- * @property {string} password 128-character hashed password
+ * @property {string} password
  */
 
 /** business logic for write operations */

@@ -1,7 +1,10 @@
+const createError = require('http-errors')
 const { body, validationResult } = require('express-validator')
 const express = require('express')
-const cqrs = require('../cqrs')(global.mongoose)
-const handler = require('../controllers/home.controller')(cqrs)
+const CQRS = require('../cqrs')
+const handler = require('../controllers/home.controller')(
+  new CQRS(global.mongoose)
+)
 const {
   format,
   parse,
@@ -11,7 +14,7 @@ const {
 const router = express.Router()
 
 router.post(
-  '/',
+  '/register',
   body('email')
     .exists({ checkFalsy: true, checkNull: true })
     .withMessage(reqCodes.missing_param)
@@ -89,35 +92,36 @@ router.post(
     }
   }
 )
+router.delete(
+  '/logout',
+  body('token').exists().withMessage(reqCodes.missing_param),
+  async (req, res, next) => {
+    // request validation
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ error: format(errors) })
+    }
 
-// router.delete(
-//   '/logout',
-//   body('token').exists().withMessage(reqCodes.missing_param),
-//   async (req, res, next) => {
-//     // request validation
-//     const errors = validationResult(req)
-//     if (!errors.isEmpty()) {
-//       return res.status(400).json({ error: format(errors) })
-//     }
-
-//     try {
-//       const id = await handler.token(req)
-//       return res.status(201).json({ id })
-//     } catch (error) {
-//       const known = parse(error)
-//       const status = known.code ? 400 : 500
-//       return res.status(status).json({ error: known })
-//     }
-//   }
-// )
-
-router.get('/verify', async (req, res, next) => {
+    try {
+      const tokenDeleted = await handler.logout(req)
+      return res.status(201).json(tokenDeleted._id)
+    } catch (error) {
+      const known = parse(error)
+      const status = known.code ? 400 : 500
+      return res.status(status).json({ error: known })
+    }
+  }
+)
+// for every route except /register /login /logout /token
+// must add Header Token:  Authorization:  Bearer 'AccessToken'
+router.use('/', async (req, res, next) => {
   try {
     const payload = await handler.verify(req)
-    res.json(payload)
+    req.user = payload
+    next()
   } catch (error) {
     const known = parse(error)
-    const status = known.code ? 400 : 500
+    const status = known.code ? 401 : 500
     return res.status(status).json({ error: known })
   }
 })
@@ -131,6 +135,11 @@ router.get('/:id', async (req, res) => {
     const status = known.code ? 400 : 500
     return res.status(status).json({ error: known })
   }
+})
+
+// catch 404
+router.use(function (req, res, next) {
+  return res.status(404).json({ error: { message: 'route not found' } })
 })
 
 module.exports = { endpoint: '/', router }

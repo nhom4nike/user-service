@@ -5,8 +5,7 @@ const errors = require('../../utils/errors')
 class AuthFactory {
   /**
    * @typedef {import('mongoose').Model} Model
-   * @param {Object} models mongoose's models
-   * @param {Model} models.auth
+   * @param {Model} auth
    */
   constructor(auth) {
     this.auth = auth

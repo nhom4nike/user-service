@@ -1,6 +1,10 @@
 const errors = require('../utils/errors')
 const bcrypt = require('bcrypt')
 
+/**
+ * controller for home.route
+ * @param {import('../cqrs')} cqrs
+ */
 module.exports = function handler({ user, auth }) {
   return {
     create: async function (req) {
@@ -54,19 +58,28 @@ module.exports = function handler({ user, auth }) {
 
     // for refresh token
     token: async function (req) {
-      const token = await auth.projection.query('get', req.body)
-      if (!token) {
+      const tokenModel = await auth.projection.query('get', req.body)
+      if (!tokenModel) {
         throw errors.create(errors.codes.auth.token_invalid, req.body.token)
       }
 
-      const payload = await auth.projection.query('verifyRefreshToken', token)
+      const payload = await auth.projection.query(
+        'verifyRefreshToken',
+        tokenModel.token
+      )
       console.log(payload)
       return await auth.aggregate.command('generateAccessToken', payload)
     },
 
     // delete refresh token
     logout: async function (req) {
-      return await auth.aggregate.command('deleteToken', req.body)
+      const tokenModel = await auth.aggregate.command(
+        'deleteToken',
+        req.body.token
+      )
+      if (!tokenModel) {
+        throw errors.create(errors.codes.auth.token_invalid)
+      }
     }
   }
 }

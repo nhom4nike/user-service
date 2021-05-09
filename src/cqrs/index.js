@@ -5,19 +5,20 @@ const { UserRepository, AuthRepository } = require('../cqrs/repositories')
 const UserModel = require('../database/user.model')
 const AuthModel = require('../database/auth.model')
 
-let userModel
-let authModel
-module.exports = function (mongoose) {
-  if (!userModel) userModel = UserModel(mongoose)
-  if (!authModel) authModel = AuthModel(mongoose)
-  return {
-    user: {
+class CQRS {
+  constructor(mongoose) {
+    const userModel = UserModel(mongoose)
+    const authModel = AuthModel(mongoose)
+
+    this.user = {
       projection: new UserProjection(new UserFactory(userModel)),
       aggregate: new UserAggregate(new UserRepository(userModel))
-    },
-    auth: {
+    }
+
+    this.auth = {
       projection: new AuthProjection(new AuthFactory(authModel)),
       aggregate: new AuthAggregate(new AuthRepository(authModel))
     }
   }
 }
+module.exports = CQRS

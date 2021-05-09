@@ -6,11 +6,11 @@ const codes = {
   },
   user: {
     invalid_id: 'user/invalid-id',
-    duplicate_username: 'user/duplicate_username',
+    duplicate_username: 'user/duplicate-username',
     duplicate_email: 'user/duplicate-email',
     invalid_email: 'user/invalid-email',
     weak_password: 'user/weak-password',
-    wrong_email: 'user/wrong_email',
+    wrong_email: 'user/wrong-email',
     wrong_password: 'user/wrong_password'
   },
   auth: {
