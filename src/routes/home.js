@@ -1,7 +1,9 @@
 const { body, validationResult } = require('express-validator')
 const express = require('express')
-const cqrs = require('../cqrs')(global.mongoose)
-const handler = require('../controllers/home.controller')(cqrs)
+const CQRS = require('../cqrs')
+const handler = require('../controllers/home.controller')(
+  new CQRS(global.mongoose)
+)
 const {
   format,
   parse,
