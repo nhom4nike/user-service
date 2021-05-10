@@ -5,5 +5,5 @@ const CQRS = require('../cqrs')
 const cqrs = new CQRS({ user: UserModel, auth: AuthModel })
 
 module.exports = {
-  home: require('../controllers/home.controller')(cqrs)
+  auth: require('./auth.controller')(cqrs)
 }

@@ -1,5 +1,6 @@
 const index = require('./home')
 const security = require('./security')
+const authorization = require('./authorization')
 // const verification = require('./verification')
 
-module.exports = [index, security]
+module.exports = [index, authorization, security]

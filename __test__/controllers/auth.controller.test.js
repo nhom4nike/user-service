@@ -1,4 +1,4 @@
-const HomeController = require('@/controllers/home.controller')
+const HomeController = require('@/controllers/auth.controller')
 const UserAggregate = require('@/cqrs/aggregates/user.aggregate')
 const UserProjection = require('@/cqrs/projections/user.projection')
 

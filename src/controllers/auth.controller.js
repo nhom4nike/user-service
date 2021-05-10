@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt')
  * controller for home.route
  * @param {import('../cqrs')} cqrs
  */
+
 module.exports = function handler({ user, auth }) {
   return {
     create: async function (req) {
