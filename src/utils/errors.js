@@ -3,7 +3,8 @@ const codes = {
     missing_param: 'req/missing-param',
     invalid_email: 'req/invalid-email',
     type_mismatch: 'req/type-mismatch',
-    missing_header: 'req/missing-header'
+    missing_header: 'req/missing-header',
+    weak_password: 'req/weak-password'
   },
   user: {
     invalid_id: 'users/invalid-id',
@@ -40,6 +41,8 @@ function map(code) {
       return 'password is not correct'
     case codes.req.invalid_email:
       return 'invalid email format'
+    case codes.req.weak_password:
+      return 'password is too weak'
     case codes.req.missing_param:
       return 'missing required parameter'
     case codes.req.type_mismatch:

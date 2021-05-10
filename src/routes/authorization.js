@@ -27,7 +27,7 @@ router.post(
     .exists()
     .withMessage(reqCodes.missing_param)
     .isStrongPassword()
-    .withMessage('password is too weak'),
+    .withMessage(reqCodes.weak_password),
   async (req, res, next) => {
     // request validation
     const errors = validationResult(req)

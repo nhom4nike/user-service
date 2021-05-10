@@ -2,7 +2,7 @@ const express = require('express')
 const { header, validationResult } = require('express-validator')
 const { auth: handler } = require('../controllers')
 
-const { parse, codes, format } = require('../utils/errors')
+const { codes, format } = require('../utils/errors')
 
 const router = express.Router()
 
@@ -25,23 +25,5 @@ router.use(
       .catch(next)
   }
 )
-
-// 404 middleware
-router.use('/', async (req, res) => {
-  return res.status(404).json({
-    error: {
-      code: 'req/404-not-found',
-      message: '404 resource not found',
-      value: req.path
-    }
-  })
-})
-
-// error middleware
-router.use('/', async (error, req, res, next) => {
-  const known = parse(error)
-  const status = known.code ? 400 : 500
-  return res.status(status).json({ error: known })
-})
 
 module.exports = { endpoint: '/', router }
