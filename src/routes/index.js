@@ -3,4 +3,4 @@ const security = require('./security')
 const authorization = require('./authorization')
 // const verification = require('./verification')
 
-module.exports = [index, authorization, security]
+module.exports = [authorization].concat(index).concat(security)

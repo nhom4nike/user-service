@@ -97,4 +97,4 @@ router.get('/info', async (req, res) => {
   res.json(req.user)
 })
 
-module.exports = { endpoint: '/auth', router }
+module.exports = { endpoint: '/', router }
