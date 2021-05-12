@@ -121,50 +121,52 @@ test('should faild for weak password', async () => {
   })
 })
 
-test('should email be unique', async () => {
-  const users = new UserRepository(model)
+describe('testing unique fields', () => {
+  const username = 'myname'
+  const email = 'myemail@gmail.com'
 
-  const tasks = [
-    users.create(
-      { username: 'myname123', email: '123@gmail.com', password: '1' },
-      true
-    ),
-    users.create(
-      { username: 'myname', email: '123@gmail.com', password: '1' },
-      true
-    )
-  ]
-  await expect(Promise.all(tasks)).rejects.toThrowError()
-})
-
-test('should username be unique', async () => {
-  const users = new UserRepository(model)
-
-  const tasks = [
-    users.create(
-      { username: 'myname', email: 'abc@gmail.com', password: '1' },
-      true
-    ),
-    users.create(
-      { username: 'myname', email: 'abcd@gmail.com', password: '1' },
+  let id
+  test('should create a user', async () => {
+    const users = new UserRepository(model)
+    const task = users.create(
+      {
+        username,
+        email,
+        password: '1'
+      },
       true
     )
-  ]
-  await expect(Promise.all(tasks)).rejects.toThrowError()
-})
+    await expect(task).resolves.toBeTruthy()
+    id = await task
+  })
 
-test('should activate user', async () => {
-  const users = new UserRepository(model)
-  const id = await users.create(
-    {
-      username: 'my really Long Name',
-      email: 'amy-fucking-emailk@gmail.com',
-      password: '1'
-    },
-    true
-  )
-  await users.activate(id)
+  test('should email be unique', async () => {
+    const users = new UserRepository(model)
+    const task = users.create(
+      { username: username + '123', email, password: '1' },
+      true
+    )
+    await expect(task).rejects.toThrowError()
+  })
 
-  const document = await users.model.findById(id, 'status', { lean: true })
-  expect(document.status).toBeTruthy()
+  test('should username be unique', async () => {
+    const users = new UserRepository(model)
+    const task = users.create(
+      {
+        username,
+        email: '123' + email,
+        password: '1'
+      },
+      true
+    )
+
+    await expect(task).rejects.toThrowError()
+  })
+
+  test('should activate user', async () => {
+    const users = new UserRepository(model)
+    await users.activate(id)
+    const document = await users.model.findById(id, 'status', { lean: true })
+    expect(document.status).toBeTruthy()
+  })
 })
