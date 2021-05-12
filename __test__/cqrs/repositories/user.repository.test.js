@@ -10,6 +10,9 @@ let model
 beforeAll(async () => {
   mongoose = await initTestDB('user_repository_test')
   model = UserModel(mongoose)
+
+  // craete model's indexes
+  await model.init()
 })
 
 afterAll(async () => {

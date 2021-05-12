@@ -15,14 +15,12 @@ module.exports = function (mongoose) {
         username: {
           type: Schema.Types.String,
           required: true,
-          index: true,
           unique: true,
           select: true
         },
         email: {
           type: Schema.Types.String,
           required: true,
-          index: true,
           unique: true,
           select: true,
           validate: {
