@@ -1,3 +1,6 @@
 // load environment variables
 const dotenv = require('dotenv')
-dotenv.config({ path: '.env.development' })
+const environment = process.env.NODE_ENV
+dotenv.config({
+  path: environment === 'test' ? '.env.test' : '.env.development'
+})
