@@ -46,8 +46,8 @@ class UserRepository {
     const hashed = test ? password : await bcrypt.hash(password, 12)
 
     const document = await this.model.create({
-      username: username?.trim(),
-      email: email?.trim(),
+      username: username.trim(),
+      email: email.trim(),
       password: hashed
     })
     return document.id
