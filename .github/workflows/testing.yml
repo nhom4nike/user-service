@@ -23,7 +23,7 @@ jobs:
         node-version: '14'
 
     - run: npm ci
-    - run: npm test:remote
+    - run: npm run test:remote
   
   build:
     name: 'Build docker image'
