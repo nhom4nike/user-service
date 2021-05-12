@@ -1,3 +1,4 @@
+
 {
   "name": "user-service",
   "version": "1.0.0",
@@ -7,7 +8,8 @@
     "start:docker": "node .",
     "start": "cross-env NODE_ENV=production node .",
     "dev": "cross-env EUREKA_DISABLE=1 NODE_ENV=development nodemon",
-    "test": "jest",
+    "test": "jest __test__",
+    "test:workflow": "docker kill $(docker ps -q) &&  docker rm $(docker ps -a -q) && act push -j test -s GITHUB_TOKEN=\"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\" -r -W ./.github/workflows/testing.yml",
     "prepare": "husky install"
   },
   "keywords": [],

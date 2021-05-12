@@ -1,11 +1,11 @@
-FROM node:lts-alpine
+FROM node:14
+
+RUN apt-get update && apt-get upgrade -y
 
 WORKDIR /usr/app
 COPY package*.json ./
-RUN npm ci --only=production 
+RUN npm ci 
 
-COPY .env* ./
-COPY src ./src/
-COPY www ./www/
+COPY . .
 
-CMD [ "npm", "run", "start:docker" ]
+CMD [ "npm", "test" ]

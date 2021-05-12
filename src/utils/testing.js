@@ -2,7 +2,7 @@ const mongoose = require('mongoose')
 
 module.exports = {
   initTestDB: async function (name) {
-    const instance = mongoose.createConnection(
+    const instance = await mongoose.createConnection(
       process.env.MONGO_CONNECTION_STRING,
       {
         dbName: name,
