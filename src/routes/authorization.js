@@ -1,12 +1,18 @@
 const express = require('express')
 const { body, validationResult } = require('express-validator')
 const { auth: handler } = require('../controllers')
+const KafkaService = require('../infra/kafka/index')
+require('dotenv').config()
 
 const {
   format,
   codes: { req: reqCodes }
 } = require('../utils/errors')
 
+const kafkaService = KafkaService.getInstance('USER_SERVICE', [
+  '139.59.238.217:9092'
+])
+const topic = 'USER-CREATE'
 const router = express.Router()
 
 router.post(
@@ -34,11 +40,22 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: format(errors) })
     }
-
-    return handler
-      .create(req)
-      .then((id) => res.status(201).json({ id }))
-      .catch(next)
+    await kafkaService.init()
+    let userId
+    try {
+      userId = await handler.create(req)
+      const messages = [
+        { key: 'userId', value: userId },
+        { key: 'email', value: req.body.email }
+        // {key:'link', value:}
+      ]
+      console.log(messages)
+      await kafkaService.sendMessage(topic, messages)
+    } catch (err) {
+      next(err)
+    } finally {
+      res.status(201).json({ userId })
+    }
   }
 )
 
