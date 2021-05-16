@@ -9,8 +9,8 @@ const {
   codes: { req: reqCodes }
 } = require('../utils/errors')
 
-const kafkaService = KafkaService.getInstance('USER_SERVICE', [
-  '139.59.238.217:9092'
+const kafkaService = KafkaService.getInstance(process.env.SERVICE_NAME, [
+  process.env.KAFKA_HOST
 ])
 const topic = 'USER-CREATE'
 const router = express.Router()
