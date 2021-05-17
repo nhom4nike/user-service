@@ -33,6 +33,16 @@ module.exports = function (mongoose) {
           default: 'inactive',
           select: true
         },
+        publicKey: {
+          type: Schema.Types.String,
+          required: true,
+          select: true
+        },
+        crypt: {
+          type: Schema.Types.String,
+          required: true,
+          select: true
+        },
         password: {
           type: Schema.Types.String,
           required: true
