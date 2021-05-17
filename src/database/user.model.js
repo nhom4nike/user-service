@@ -33,7 +33,7 @@ module.exports = function (mongoose) {
           default: 'inactive',
           select: true
         },
-        publicKey: {
+        public_key: {
           type: Schema.Types.String,
           required: true,
           select: true

@@ -34,28 +34,37 @@ router.post(
     .withMessage(reqCodes.missing_param)
     .isStrongPassword()
     .withMessage(reqCodes.weak_password),
+  body('public_key').exists().withMessage(reqCodes.missing_param),
+  body('crypt').exists().withMessage(reqCodes.missing_param),
+
   async (req, res, next) => {
     // request validation
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
       return res.status(400).json({ error: format(errors) })
     }
+
     await kafkaService.init()
-    let userId
-    try {
-      userId = await handler.create(req)
-      const messages = [
-        { key: 'userId', value: userId },
-        { key: 'email', value: req.body.email }
-        // {key:'link', value:}
-      ]
-      console.log(messages)
-      await kafkaService.sendMessage(topic, messages)
-    } catch (err) {
-      next(err)
-    } finally {
-      res.status(201).json({ userId })
-    }
+    return handler
+      .create(req)
+      .then((id) => {
+        // publish message to kafka
+        kafkaService
+          .init()
+          .then(async () => {
+            const messages = [
+              { key: 'userId', value: id },
+              { key: 'email', value: req.body.email }
+              // {key:'link', value:}
+            ]
+            await kafkaService.sendMessage(topic, messages)
+          })
+          .catch(console.error)
+
+        // resposne to client
+        return res.status(201).json({ id })
+      })
+      .catch(next)
   }
 )
 

@@ -1,5 +1,4 @@
 const errors = require('../utils/errors')
-const bcrypt = require('bcrypt')
 
 /**
  * controller for home.route
@@ -24,7 +23,7 @@ module.exports = function handler({ user, auth }) {
       if (!userModel) {
         throw errors.create(errors.codes.user.wrong_email, email)
       }
-      if (!bcrypt.compareSync(password, userModel.password)) {
+      if (password !== userModel.password) {
         throw errors.create(errors.codes.user.wrong_password, password)
       }
 
@@ -40,6 +39,7 @@ module.exports = function handler({ user, auth }) {
       return {
         id: userModel.id,
         email: userModel.email,
+        crypt: userModel.crypt,
         accessToken,
         refreshToken
       }

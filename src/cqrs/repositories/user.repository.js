@@ -1,12 +1,13 @@
 const validator = require('validator').default
 const errors = require('../../utils/errors')
-const bcrypt = require('bcrypt')
 
 /**
  * @typedef {Object} UserRegistration
  * @property {string} email
  * @property {string} username
- * @property {string} password
+ * @property {string} password bcrypted password sent from client, no need to hash
+ * @property {string} public_key
+ * @property {string} crypt private key
  */
 
 /** business logic for write operations */
@@ -25,7 +26,7 @@ class UserRepository {
    * should only be use in testing
    * @returns {Promise<string>} id of new user
    */
-  async create({ username, email, password }, test = false) {
+  async create({ username, email, password, public_key, crypt }, test = false) {
     if (process.env.NODE_ENV === 'production' && test) {
       console.error(
         'test mode should only be used in test environment, terminate process'
@@ -38,17 +39,14 @@ class UserRepository {
       if (!validator.isEmail(email)) {
         throw errors.create(errors.codes.user.invalid_email, email)
       }
-      if (!validator.isStrongPassword(password)) {
-        throw errors.create(errors.codes.user.weak_password, password)
-      }
     }
-
-    const hashed = test ? password : await bcrypt.hash(password, 12)
 
     const document = await this.model.create({
       username: username.trim(),
       email: email.trim(),
-      password: hashed
+      password,
+      public_key,
+      crypt
     })
     return document.id
   }

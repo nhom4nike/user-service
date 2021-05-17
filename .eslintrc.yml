@@ -10,3 +10,4 @@ parserOptions:
 rules:
   space-before-function-paren: 0
   no-console: warn
+  camelcase: 0

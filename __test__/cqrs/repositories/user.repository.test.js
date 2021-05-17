@@ -135,7 +135,9 @@ describe('testing unique fields', () => {
       {
         username,
         email,
-        password: '1'
+        password: '1',
+        crypt: '123',
+        public_key: '123'
       },
       true
     )
