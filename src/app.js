@@ -5,8 +5,8 @@ const cookieParser = require('cookie-parser')
 const eureka = require('./eureka')
 const database = require('./database/config')
 const cors = require('cors')
-
 const { parse } = require('./utils/errors')
+const kafka = require('./kafka')
 
 if (!process.env.EUREKA_DISABLE) eureka.start()
 
@@ -15,6 +15,9 @@ module.exports = {
     // connect to database, this must be call before importing any routes
     console.log('connecting to database...')
     global.mongoose = await database.connect()
+
+    console.log('initialize kafka service...')
+    await kafka.init()
 
     // setup express server
     const server = express()
