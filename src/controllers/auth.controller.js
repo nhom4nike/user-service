@@ -101,13 +101,11 @@ module.exports = function handler({ user, auth }) {
 
     // delete refresh token
     logout: async function (req) {
-      const tokenModel = await auth.aggregate.command(
-        'deleteToken',
-        req.body.token
-      )
-      if (!tokenModel) {
-        throw errors.create(errors.codes.auth.token_invalid)
-      }
+      // delete user refresh token
+      return await user.aggregate.command('updateRefreshToken', {
+        id: req.user._id,
+        refreshToken: ''
+      })
     }
   }
 }

@@ -104,22 +104,12 @@ router.use('/', async (req, res, next) => {
     .catch(next)
 })
 
-router.delete(
-  '/logout',
-  body('token').exists().withMessage(reqCodes.missing_param),
-  async (req, res, next) => {
-    // request validation
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ error: format(errors) })
-    }
-
-    return handler
-      .logout(req)
-      .then(({ _id }) => res.json({ _id }))
-      .catch(next)
-  }
-)
+router.delete('/logout', async (req, res, next) => {
+  return handler
+    .logout(req)
+    .then(({ _id }) => res.json({ _id }))
+    .catch(next)
+})
 
 router.get('/info', async (req, res) => {
   res.json(req.user)
