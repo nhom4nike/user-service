@@ -29,19 +29,25 @@ module.exports = function handler({ user, auth }) {
 
       const accessToken = await auth.aggregate.command(
         'generateAccessToken',
-        userModel
+        userModel._id
       )
       const refreshToken = await auth.aggregate.command(
         'generateRefreshToken',
-        userModel
+        userModel._id
       )
+      await user.aggregate.command('updateRefreshToken', {
+        id: userModel._id,
+        refreshToken
+      })
 
       return {
-        id: userModel.id,
-        email: userModel.email,
-        crypt: userModel.crypt,
         accessToken,
-        refreshToken
+        refreshToken,
+        data: {
+          id: userModel._id,
+          email: userModel.email,
+          crypt: userModel.crypt
+        }
       }
     },
 

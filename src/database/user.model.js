@@ -46,6 +46,10 @@ module.exports = function (mongoose) {
         password: {
           type: Schema.Types.String,
           required: true
+        },
+        refreshToken: {
+          type: Schema.Types.String,
+          default: ''
         }
       },
       {

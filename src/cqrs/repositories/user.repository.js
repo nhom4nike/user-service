@@ -58,6 +58,10 @@ class UserRepository {
       { lean: true }
     )
   }
+
+  async update(id, newData) {
+    return this.model.findByIdAndUpdate(id, newData)
+  }
 }
 
 module.exports = UserRepository

@@ -25,12 +25,19 @@ class UserAggregate {
     // TODO: send out topic USER_CREATED
   }
 
+  async _updateRefreshToken(payload) {
+    return this.repository.update(payload.id, {
+      refreshToken: payload.refreshToken
+    })
+  }
+
   /**
    * @param {CommandNames} name the name of command
    * @param {Object} payload command's one or more arguments
    */
   async command(name, payload) {
     if (name === 'create') return this._create(payload)
+    else if (name === 'updateRefreshToken') { return this._updateRefreshToken(payload) }
     throw new Error('unknown command: ' + name)
   }
 }
