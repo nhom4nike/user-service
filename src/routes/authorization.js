@@ -92,6 +92,18 @@ router.post(
       .catch(next)
   }
 )
+
+// Decode data
+router.use('/', async (req, res, next) => {
+  return handler
+    .verify(req)
+    .then((user) => {
+      req.user = user
+      next()
+    })
+    .catch(next)
+})
+
 router.delete(
   '/logout',
   body('token').exists().withMessage(reqCodes.missing_param),

@@ -55,21 +55,14 @@ module.exports = function handler({ user, auth }) {
     verify: async function (req) {
       const authHeader = req.headers.authorization
       const token = authHeader && authHeader.split(' ')[1]
-      if (!token) {
-        throw errors.create(errors.codes.auth.token_missing)
-      }
+      // if (!token) {
+      //   throw errors.create(errors.codes.auth.token_missing)
+      // }
 
-      try {
-        const authData = await auth.projection.query('verifyAccessToken', token)
-        return authData.payload
-      } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-          throw errors.create(errors.codes.auth.token_expired, token)
-        }
-        if (error.name === 'JsonWebTokenError') {
-          throw errors.create(errors.codes.auth.token_invalid, token)
-        }
-      }
+      const authData = await auth.projection.query('verifyAccessToken', token)
+      const userId = authData.payload
+      const userModel = await user.projection.query('get', { id: userId })
+      return userModel
     },
 
     // for refresh token
