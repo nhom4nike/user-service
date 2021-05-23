@@ -36,6 +36,7 @@ refreshToken: 'newRefreshToken',
 lấy userId trong refreshToken,
 newAccessToken: tuơng tự lúc login,
 newRefreshToken: tuơng tự lúc login,
+update refreshToken cho user là newRefreshToken
 
 # DELETE /logout
 

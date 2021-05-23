@@ -92,6 +92,18 @@ module.exports = {
           value: error.value
         }
       }
+    } else if (error.name === 'TokenExpiredError') {
+      return {
+        code: codes.auth.token_expired,
+        message: map(codes.auth.token_expired),
+        value: error.value
+      }
+    } else if (error.name === 'JsonWebTokenError') {
+      return {
+        code: codes.auth.token_invalid,
+        message: map(codes.auth.token_invalid),
+        value: error.value
+      }
     } else if (error.name === 'MongoError') {
       // unique field error
       const groups = error.message.match(

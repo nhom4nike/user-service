@@ -74,24 +74,35 @@ module.exports = function handler({ user, auth }) {
 
     // for refresh token
     refresh: async function (req) {
-      const tokenModel = await auth.projection.query('get', req.body)
-      if (!tokenModel) {
-        throw errors.create(errors.codes.auth.token_invalid, req.body.token)
+      const token = req.body.refreshToken
+      const payload = await auth.projection.query('verifyRefreshToken', token)
+      const userId = payload.payload
+
+      // check if refresh token is stored in user account
+      const userModel = await user.projection.query('get', { id: userId })
+      const isRefreshTokenValid = userModel.refreshToken === token
+      if (!isRefreshTokenValid) {
+        throw errors.create(errors.codes.auth.token_invalid, token)
       }
 
-      try {
-        const payload = await auth.projection.query(
-          'verifyRefreshToken',
-          tokenModel.token
-        )
-        return await auth.aggregate.command('generateAccessToken', payload)
-      } catch (error) {
-        if (error.name === 'TokenExpiredError') {
-          throw errors.create(errors.codes.auth.token_expired, tokenModel.token)
-        }
-        if (error.name === 'JsonWebTokenError') {
-          throw errors.create(errors.codes.auth.token_invalid, tokenModel.token)
-        }
+      // generate new Token
+      const accessToken = await auth.aggregate.command(
+        'generateAccessToken',
+        userId
+      )
+      const refreshToken = await auth.aggregate.command(
+        'generateRefreshToken',
+        userId
+      )
+      // save new refresh token for user
+      await user.aggregate.command('updateRefreshToken', {
+        id: userId,
+        refreshToken
+      })
+
+      return {
+        accessToken,
+        refreshToken
       }
     },
 

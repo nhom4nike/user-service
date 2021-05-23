@@ -78,7 +78,7 @@ router.post(
 
 router.post(
   '/refresh',
-  body('token').exists().withMessage(reqCodes.missing_param),
+  body('refreshToken').exists().withMessage(reqCodes.missing_param),
   async (req, res, next) => {
     // request validation
     const errors = validationResult(req)
@@ -88,7 +88,7 @@ router.post(
 
     return handler
       .refresh(req)
-      .then((accessToken) => res.json({ accessToken }))
+      .then((data) => res.json(data))
       .catch(next)
   }
 )
