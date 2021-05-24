@@ -23,16 +23,16 @@
 
 ```js
 body: {
-  username,
-    email,
-    password,
-    firstName,
-    lastName,
-    telephone,
-    position,
-    hash,
-    publicKey,
-    crypt
+    username: 'username',
+    email: 'email',
+    password: 'password', // hash
+    firstName: 'firstName',
+    lastName: 'lastName',
+    telephone: 'telephone',
+    position: 'position',
+    hash: 'hash', // ?
+    publicKey: 'publicKey',
+    crypt: 'crypt',
 }
 ```
 
@@ -88,3 +88,26 @@ return {
 
 - Đã có accessToken trong header
 - Tiến hành lấy userId trong accessToken và xóa refreshToken trong userModel,
+
+# GET /info
+
+```json
+{
+    "_id": _id
+    "firstName": firstName
+    "lastName": lastName
+    "telephone": telephone
+    "position": position
+    "status": status
+    "refreshToken": refreshToken
+    "username": username
+    "email": email
+    "password": password
+    "hash": hash
+    "publicKey": publicKey
+    "crypt": crypt
+    "created_at": created_at
+    "updated_at": updated_at
+    "__v": __v
+}
+```
