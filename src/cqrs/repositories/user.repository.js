@@ -26,7 +26,21 @@ class UserRepository {
    * should only be use in testing
    * @returns {Promise<string>} id of new user
    */
-  async create({ username, email, password, public_key, crypt }, test = false) {
+  async create(
+    {
+      username,
+      email,
+      password,
+      firstName,
+      lastName,
+      telephone,
+      position,
+      hash,
+      publicKey,
+      crypt
+    },
+    test = false
+  ) {
     if (process.env.NODE_ENV === 'production' && test) {
       console.error(
         'test mode should only be used in test environment, terminate process'
@@ -45,7 +59,12 @@ class UserRepository {
       username: username.trim(),
       email: email.trim(),
       password,
-      public_key,
+      firstName,
+      lastName,
+      telephone,
+      position,
+      hash,
+      publicKey,
       crypt
     })
     return document.id

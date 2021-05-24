@@ -28,22 +28,40 @@ module.exports = function (mongoose) {
             message: user.invalid_email
           }
         },
+        password: {
+          type: Schema.Types.String,
+          required: true
+        },
+        firstName: {
+          type: Schema.Types.String,
+          default: ''
+        },
+        lastName: {
+          type: Schema.Types.String,
+          default: ''
+        },
+        telephone: {
+          type: Schema.Types.String,
+          default: ''
+        },
+        position: {
+          type: Schema.Types.String,
+          default: ''
+        },
         status: {
           type: Schema.Types.String,
           default: 'inactive',
           select: true
         },
-        public_key: {
+        hash: {
           type: Schema.Types.String,
-          required: true,
-          select: true
+          required: true
+        },
+        publicKey: {
+          type: Schema.Types.String,
+          required: true
         },
         crypt: {
-          type: Schema.Types.String,
-          required: true,
-          select: true
-        },
-        password: {
           type: Schema.Types.String,
           required: true
         },

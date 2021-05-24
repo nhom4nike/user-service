@@ -29,7 +29,12 @@ router.post(
     .withMessage(reqCodes.missing_param)
     .isStrongPassword()
     .withMessage(reqCodes.weak_password),
-  body('public_key').exists().withMessage(reqCodes.missing_param),
+  body('firstName').exists().withMessage(reqCodes.missing_param),
+  body('lastName').exists().withMessage(reqCodes.missing_param),
+  body('telephone').exists().withMessage(reqCodes.missing_param),
+  body('position').exists().withMessage(reqCodes.missing_param),
+  body('hash').exists().withMessage(reqCodes.missing_param),
+  body('publicKey').exists().withMessage(reqCodes.missing_param),
   body('crypt').exists().withMessage(reqCodes.missing_param),
 
   async (req, res, next) => {
