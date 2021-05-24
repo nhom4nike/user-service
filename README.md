@@ -56,7 +56,21 @@ return {
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
   data: {
-    userInfo
+    _id: '_id',
+    firstName: 'firstName',
+    lastName: 'lastName',
+    telephone: 'telephone',
+    position: 'position',
+    status: 'status',
+    refreshToken: 'refreshToken',
+    username: 'username',
+    email: 'email',
+    password: 'password',
+    publicKey: 'publicKey',
+    crypt: 'crypt',
+    created_at: 'created_at',
+    updated_at: 'updated_at',
+    __v: '__v'
   }
 }
 ```
@@ -93,21 +107,22 @@ return {
 
 ```json
 {
-    "_id": _id
-    "firstName": firstName
-    "lastName": lastName
-    "telephone": telephone
-    "position": position
-    "status": status
-    "refreshToken": refreshToken
-    "username": username
-    "email": email
-    "password": password
-    "hash": hash
-    "publicKey": publicKey
-    "crypt": crypt
-    "created_at": created_at
-    "updated_at": updated_at
-    "__v": __v
+  "_id": "_id",
+  "firstName": "firstName",
+  "lastName": "lastName",
+  "telephone": "telephone",
+  "position": "position",
+  "status": "status",
+  "refreshToken": "refreshToken",
+  "username": "username",
+  "email": "email",
+  "password": "password",
+  "publicKey": "publicKey",
+  "crypt": "crypt",
+  "created_at": "created_at",
+  "updated_at": "updated_at",
+  "__v": "__v"
 }
 ```
+
+# PUT /update

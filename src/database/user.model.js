@@ -53,10 +53,6 @@ module.exports = function (mongoose) {
           default: 'inactive',
           select: true
         },
-        hash: {
-          type: Schema.Types.String,
-          required: true
-        },
         publicKey: {
           type: Schema.Types.String,
           required: true

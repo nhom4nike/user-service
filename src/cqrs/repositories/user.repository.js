@@ -35,7 +35,6 @@ class UserRepository {
       lastName,
       telephone,
       position,
-      hash,
       publicKey,
       crypt
     },
@@ -63,7 +62,6 @@ class UserRepository {
       lastName,
       telephone,
       position,
-      hash,
       publicKey,
       crypt
     })

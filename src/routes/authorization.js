@@ -33,7 +33,6 @@ router.post(
   body('lastName').exists().withMessage(reqCodes.missing_param),
   body('telephone').exists().withMessage(reqCodes.missing_param),
   body('position').exists().withMessage(reqCodes.missing_param),
-  body('hash').exists().withMessage(reqCodes.missing_param),
   body('publicKey').exists().withMessage(reqCodes.missing_param),
   body('crypt').exists().withMessage(reqCodes.missing_param),
 

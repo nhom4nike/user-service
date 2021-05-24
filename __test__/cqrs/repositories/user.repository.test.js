@@ -140,7 +140,6 @@ describe('testing unique fields', () => {
         lastName: '',
         telephone: '',
         position: '',
-        hash: '1',
         publicKey: '1',
         crypt: '1'
       },
