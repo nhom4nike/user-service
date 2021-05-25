@@ -24,11 +24,9 @@ router.post(
     .isString()
     .withMessage(reqCodes.type_mismatch)
     .trim(),
-  body('password')
-    .exists()
-    .withMessage(reqCodes.missing_param)
-    .isStrongPassword()
-    .withMessage(reqCodes.weak_password),
+  body('password').exists().withMessage(reqCodes.missing_param),
+  // .isStrongPassword()
+  // .withMessage(reqCodes.weak_password),
   body('firstName').exists().withMessage(reqCodes.missing_param),
   body('lastName').exists().withMessage(reqCodes.missing_param),
   body('telephone').exists().withMessage(reqCodes.missing_param),
@@ -55,7 +53,7 @@ router.post(
           ])
           .catch(console.error)
 
-        // resposne to client
+        // response to client
         return res.status(201).json({ id: userId })
       })
       .catch(next)
