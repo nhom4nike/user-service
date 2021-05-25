@@ -43,11 +43,7 @@ module.exports = function handler({ user, auth }) {
       return {
         accessToken,
         refreshToken,
-        data: {
-          id: userModel._id,
-          email: userModel.email,
-          crypt: userModel.crypt
-        }
+        user: await user.projection.query('getInfo', userModel)
       }
     },
 
@@ -106,6 +102,11 @@ module.exports = function handler({ user, auth }) {
         id: req.user._id,
         refreshToken: ''
       })
+    },
+
+    // get user information
+    info: async function (req) {
+      return await user.projection.query('getInfo', req.user)
     }
   }
 }

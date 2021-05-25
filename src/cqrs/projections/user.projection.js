@@ -29,6 +29,22 @@ class UserProjection {
     return this.factory.findByEmail(query)
   }
 
+  async _getInfo(user) {
+    return {
+      _id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      telephone: user.telephone,
+      position: user.position,
+      status: user.status,
+      username: user.username,
+      email: user.email,
+      password: user.password,
+      publicKey: user.publicKey,
+      crypt: user.crypt
+    }
+  }
+
   /**
    * @param {CommandNames} name the name of query command
    * @param {Object} query additional conditions for the query
@@ -37,6 +53,8 @@ class UserProjection {
     switch (name) {
       case 'get':
         return this._get(query)
+      case 'getInfo':
+        return this._getInfo(query)
       case 'findByEmail':
         return this._findByEmail(query)
       default:

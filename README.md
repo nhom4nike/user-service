@@ -30,7 +30,6 @@ body: {
     lastName: 'lastName',
     telephone: 'telephone',
     position: 'position',
-    hash: 'hash', // ?
     publicKey: 'publicKey',
     crypt: 'crypt',
 }
@@ -55,22 +54,18 @@ return {
 return {
   accessToken: 'accessToken',
   refreshToken: 'refreshToken',
-  data: {
+  user: {
     _id: '_id',
     firstName: 'firstName',
     lastName: 'lastName',
     telephone: 'telephone',
     position: 'position',
     status: 'status',
-    refreshToken: 'refreshToken',
     username: 'username',
     email: 'email',
     password: 'password',
     publicKey: 'publicKey',
-    crypt: 'crypt',
-    created_at: 'created_at',
-    updated_at: 'updated_at',
-    __v: '__v'
+    crypt: 'crypt'
   }
 }
 ```
@@ -105,23 +100,19 @@ return {
 
 # GET /info
 
-```json
+```js
 {
-  "_id": "_id",
-  "firstName": "firstName",
-  "lastName": "lastName",
-  "telephone": "telephone",
-  "position": "position",
-  "status": "status",
-  "refreshToken": "refreshToken",
-  "username": "username",
-  "email": "email",
-  "password": "password",
-  "publicKey": "publicKey",
-  "crypt": "crypt",
-  "created_at": "created_at",
-  "updated_at": "updated_at",
-  "__v": "__v"
+  _id: '_id',
+  firstName: 'firstName',
+  lastName: 'lastName',
+  telephone: 'telephone',
+  position: 'position',
+  status: 'status',
+  username: 'username',
+  email: 'email',
+  password: 'password',
+  publicKey: 'publicKey',
+  crypt: 'crypt',
 }
 ```
 

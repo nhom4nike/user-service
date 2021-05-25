@@ -113,8 +113,11 @@ router.delete('/logout', async (req, res, next) => {
     .catch(next)
 })
 
-router.get('/info', async (req, res) => {
-  res.json(req.user)
+router.get('/info', async (req, res, next) => {
+  return handler
+    .info(req)
+    .then((userInfo) => res.json(userInfo))
+    .catch(next)
 })
 
 module.exports = { endpoint: '/', router }
