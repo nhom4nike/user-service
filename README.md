@@ -1,12 +1,18 @@
 # user-service
 
-# Các route trừ /register, /login đều phải add accessToken vào header
+> **API BaseURL:** `https://api.04-nike.tk/user`
+
+- Testing URL: `http://04-nike.tk:4001`
+
+Các route trừ /register, /login đều phải add accessToken vào header
 
 # Response code
 
 - `200`: OK
 - `400`: Bad Request, Xem chi tiết lỗi trong message trả về
+- `401`: Unauthorized, Thiếu headerToken, thêm Token: Authorization: Bearer 'accessToken'
 - `500`: Internal Server Error
+
 <!-- ## API Reference
 
 #### Get all items
@@ -16,23 +22,23 @@
 ```
 
 | Parameter | Type     | Description                |
-| :-------- | :------- | :------------------------- | --- |
-| `api_key` | `string` | **Required**. Your API key | --> |
+| :-------- | :------- | :------------------------- |
+| `api_key` | `string` | **Required**. Your API key | -->
 
 # POST /register
 
 ```js
-body: {
-    username: 'username',
-    email: 'email',
-    password: 'password', // hash
-    firstName: 'firstName',
-    lastName: 'lastName',
-    telephone: 'telephone',
-    position: 'position',
-    publicKey: 'publicKey',
-    crypt: 'crypt',
-}
+    body: {
+        username: 'username',
+        email: 'email',
+        password: 'password', // hash
+        firstName: 'firstName',
+        lastName: 'lastName',
+        telephone: 'telephone',
+        position: 'position',
+        publicKey: 'publicKey',
+        crypt: 'crypt',
+    }
 ```
 
 ```js
@@ -101,7 +107,7 @@ return {
 # GET /info
 
 ```js
-{
+return {
   _id: '_id',
   firstName: 'firstName',
   lastName: 'lastName',
@@ -112,7 +118,7 @@ return {
   email: 'email',
   password: 'password',
   publicKey: 'publicKey',
-  crypt: 'crypt',
+  crypt: 'crypt'
 }
 ```
 

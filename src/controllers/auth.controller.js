@@ -47,13 +47,9 @@ module.exports = function handler({ user, auth }) {
       }
     },
 
-    // for verified route
+    // verify token and get userModel
     verify: async function (req) {
-      const authHeader = req.headers.authorization
-      const token = authHeader && authHeader.split(' ')[1]
-      // if (!token) {
-      //   throw errors.create(errors.codes.auth.token_missing)
-      // }
+      const token = req.headers.authorization.split(' ')[1]
 
       const authData = await auth.projection.query('verifyAccessToken', token)
       const userId = authData.payload

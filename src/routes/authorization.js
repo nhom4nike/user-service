@@ -1,5 +1,5 @@
 const express = require('express')
-const { body, validationResult } = require('express-validator')
+const { header, body, validationResult } = require('express-validator')
 const { auth: handler } = require('../controllers')
 const kafka = require('../kafka/')
 
@@ -96,15 +96,25 @@ router.post(
 )
 
 // Decode data
-router.use('/', async (req, res, next) => {
-  return handler
-    .verify(req)
-    .then((user) => {
-      req.user = user
-      next()
-    })
-    .catch(next)
-})
+router.use(
+  '/',
+  header('authorization').exists().withMessage(reqCodes.missing_header),
+  async (req, res, next) => {
+    // request validation
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(401).json({ error: format(errors) })
+    }
+
+    return handler
+      .verify(req)
+      .then((user) => {
+        req.user = user
+        next()
+      })
+      .catch(next)
+  }
+)
 
 router.delete('/logout', async (req, res, next) => {
   return handler
