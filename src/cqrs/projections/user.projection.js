@@ -5,7 +5,8 @@
 
 /**
  * @typedef {'get' |
- * 'findByEmail'
+ * 'findByEmail' |
+ * 'getInfo'
  * } CommandNames
  */
 

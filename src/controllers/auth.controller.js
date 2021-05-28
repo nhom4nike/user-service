@@ -103,6 +103,10 @@ module.exports = function handler({ user, auth }) {
     // get user information
     info: async function (req) {
       return await user.projection.query('getInfo', req.user)
+    },
+
+    update: async function (req) {
+      return await user.aggregate.command('update', req.body)
     }
   }
 }

@@ -25,8 +25,6 @@ router.post(
     .withMessage(reqCodes.type_mismatch)
     .trim(),
   body('password').exists().withMessage(reqCodes.missing_param),
-  // .isStrongPassword()
-  // .withMessage(reqCodes.weak_password),
   body('firstName').exists().withMessage(reqCodes.missing_param),
   body('lastName').exists().withMessage(reqCodes.missing_param),
   body('telephone').exists().withMessage(reqCodes.missing_param),
@@ -129,5 +127,19 @@ router.get('/info', async (req, res, next) => {
     .then((userInfo) => res.json(userInfo))
     .catch(next)
 })
+
+router.get(
+  '/update',
+  body('firstName').exists().withMessage(reqCodes.missing_param),
+  body('lastName').exists().withMessage(reqCodes.missing_param),
+  body('telephone').exists().withMessage(reqCodes.missing_param),
+  body('position').exists().withMessage(reqCodes.missing_param),
+  async (req, res, next) => {
+    return handler
+      .update(req)
+      .then((user) => res.json(user))
+      .catch(next)
+  }
+)
 
 module.exports = { endpoint: '/', router }

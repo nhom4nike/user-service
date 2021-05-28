@@ -5,7 +5,10 @@
  */
 
 /**
- * @typedef {'create'} CommandNames
+ * @typedef {'create' |
+ * 'updateRefreshToken' |
+ * 'update'
+ * } CommandNames
  */
 
 /** user's commands handler */
@@ -31,14 +34,25 @@ class UserAggregate {
     })
   }
 
+  async _update(payload) {
+    return this.repository.update(payload.id, payload)
+  }
+
   /**
    * @param {CommandNames} name the name of command
    * @param {Object} payload command's one or more arguments
    */
   async command(name, payload) {
-    if (name === 'create') return this._create(payload)
-    else if (name === 'updateRefreshToken') { return this._updateRefreshToken(payload) }
-    throw new Error('unknown command: ' + name)
+    switch (name) {
+      case 'create':
+        return this._create(payload)
+      case 'updateRefreshToken':
+        return this._updateRefreshToken(payload)
+      case 'update':
+        return this._update(payload)
+      default:
+        throw new Error('unknown command: ' + name)
+    }
   }
 }
 
