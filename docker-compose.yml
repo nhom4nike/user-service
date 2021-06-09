@@ -1,6 +1,4 @@
 services:
-  app:
-    build: .
   mongo:
     image: mongo
     ports:
